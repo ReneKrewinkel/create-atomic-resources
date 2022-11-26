@@ -1,0 +1,6 @@
+body {
+  margin: map-get($page, 'margin');
+  padding: map-get($page, 'padding');
+  background-color: var(--bg- + map-get($page, 'backgroundColor'));
+  font-family: 'main-text-regular';
+}

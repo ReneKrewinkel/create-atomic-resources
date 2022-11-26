@@ -1,0 +1,17 @@
+/** UTILITY: Colors **/
+@each $ct, $cd, $cp in $color-types {
+  /*! #{$cd} */
+  @each $style in $colors {
+    $type: map-get($style, 'type');
+
+    /*! #{$type} */
+    $shades: utilityColor($type, $ct, $style);
+    @each $shade, $value in $shades {
+      @if $ct == "bg" {
+        #{$shade} { background-color: unquote($value) };
+      } @else {
+        #{$shade} { color: unquote($value) };
+      }
+    }
+  }
+}

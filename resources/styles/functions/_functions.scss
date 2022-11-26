@@ -1,0 +1,74 @@
+@use "sass:map";
+@use "sass:math";
+
+$types: "light", "dark";
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@function pxToRem($pxValue) {
+  @if $unit == "rem" {
+    @return math.div($pxValue, 16) * 1rem
+  } @else {
+    @return($pxValue * 1px);
+  }
+}
+
+
+@function shade($type, $c, $percentage) {
+  @if $type == "light" {
+    @return(lighten($c, $percentage));
+  } @else {
+    @return(darken($c, $percentage));
+  }
+}
+
+@function rootColor($type, $key, $style) {
+
+    $color: map.get($style, 'color');
+    $shades: map.get($style, 'shades');
+
+    $e: ();
+
+    /// Base Color
+    $class: "--" + $key + "-" + $type;
+    $e: map.set($e, $class, $color);
+
+    /// Shades
+    @each $t in $types {
+      @each $shade in $shades {
+         $s: shade($t, $color, $shade);
+         $class: "--" + $key + "-" + $type + "-" + $t + "-" +$shade;
+         $e: map.set($e, $class, $s);
+        }
+      }
+
+    @return($e);
+}
+
+@function utilityColor($type, $key, $style) {
+
+  $type: map.get($style, 'type');
+  $color: map.get($style, 'color');
+  $shades: map.get($style, 'shades');
+
+  $e: ();
+
+  /// Base Color
+  $class: "." + $key + "-" + $type;
+  $var: "var(--" + $key + "-" + $type + ")";
+  $e: map.set($e, $class, $var);
+
+  /// Shades
+  @each $t in $types {
+    @each $shade in $shades {
+      $class: "." + $key + "-" + $type + "-" + $t + "-"+ $shade;
+      $var: "var(--" + $key + "-" + $type + "-" + $t + "-" + $shade + ")";
+      $e: map.set($e, $class, $var);
+    }
+  }
+
+  @return($e);
+}
+
