@@ -1,6 +1,6 @@
 
 ## Configure
-* Clone repo with `degit <repo url>`
+* Clone repo with `degit https://github.com/ReneKrewinkel/design-tokens.git`
 * Add to `.storybook/preview.js` 
 
 ```javascript
