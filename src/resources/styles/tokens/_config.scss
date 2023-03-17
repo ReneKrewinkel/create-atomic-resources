@@ -1,0 +1,8 @@
+$unit: map-get($tokens, 'unit');
+$colors: map-get($tokens, 'colors');
+$fonts: map-get($tokens, 'fonts');
+$headings: map-get($tokens, 'headings');
+$page: map-get($tokens, 'page');
+
+$color-types: 'bg' 'Background Color' 'background-color',
+  'fg' 'Foreground Color' 'color';

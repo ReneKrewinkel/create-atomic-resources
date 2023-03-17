@@ -1,0 +1,15 @@
+a {
+  color: rgba(0, 0, 0, 0.4);
+  transition: all 0.4s ease;
+  font-family: 'main-text-bold';
+
+  &:hover {
+    color: rgba(0, 0, 0, 1);
+  }
+}
+
+p a {
+  color: rgba(137, 126, 108, 0.6);
+  transition: all 0.4s ease;
+  font-family: 'main-text-bold';
+}

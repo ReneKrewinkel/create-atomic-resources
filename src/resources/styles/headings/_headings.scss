@@ -1,0 +1,8 @@
+@each $variant in map-get($headings, 'variant') {
+  @each $t, $s in $variant {
+    #{$t} {
+      font-family: 'heading';
+      font-size: pxToRem($s);
+    }
+  }
+}
