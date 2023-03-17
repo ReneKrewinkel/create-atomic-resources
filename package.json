@@ -1,19 +1,20 @@
 {
   "name": "create-atomic-resources",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Creates a scss framework for use with atomic-bomb",
+  "author": "René Krewinkel",
   "main": "bin/index.js",
+  "type": "module",
   "keywords": [
     "atomic design",
     "education",
     "react"
   ],
-  "author": "René Krewinkel",
   "bin": {
     "create-atomic-resources": "bin/index.js"
   },
   "scripts": {
-    "nice": "prettier -w *.js",
+    "nice": "prettier -w bin/*.js",
     "predeploy": "git add --all && git commit --allow-empty -m $npm_package_version",
     "deploy": "git push"
   },
@@ -28,5 +29,12 @@
   "bugs": {
     "url": "https://github.com/ReneKrewinkel/create-atomic-resources/issues"
   },
-  "homepage": "https://github.com/ReneKrewinkel/create-atomic-resources#readme"
+  "homepage": "https://github.com/ReneKrewinkel/create-atomic-resources#readme",
+  "dependencies": {
+    "chalk": "^5.1.2",
+    "figlet": "^1.5.2",
+    "fs-extra": "^10.1.0",
+    "shelljs": "^0.8.5",
+    "zod": "^3.19.1"
+  }
 }
