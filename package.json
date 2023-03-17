@@ -15,7 +15,7 @@
   },
   "scripts": {
     "nice": "prettier -w bin/*.js",
-    "deprecate": "npm deprecate atomic-bomb@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
+    "deprecate": "npm deprecate create-atomic-resources@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
     "predeploy": "git add --all && git commit --allow-empty  -m $npm_package_version",
     "deploy": "git push -u origin main"
   },

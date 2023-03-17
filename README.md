@@ -1,3 +1,4 @@
+> **IMPORTANT** This tool is for educational purposes only
 
 ## With npx
 ```shell 
@@ -8,7 +9,7 @@ npx create-atomic-resources ./src
 ## Manually
 Clone repo with [degit](https://www.npmjs.com/package/degit) 
 ```shell
-degit https://github.com/ReneKrewinkel/create-atomic-resources.git
+degit https://github.com/ReneKrewinkel/create-atomic-resources.git <destination dir>
 ```
 
 ## Setup
