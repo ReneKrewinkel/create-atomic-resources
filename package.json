@@ -1,20 +1,32 @@
 {
-  "name": "design-tokens",
+  "name": "create-atomic-resources",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Creates a scss framework for use with atomic-bomb",
+  "main": "bin/index.js",
+  "keywords": [
+    "atomic design",
+    "education",
+    "react"
+  ],
+  "author": "René Krewinkel",
+  "bin": {
+    "create-atomic-resources": "bin/index.js"
   },
+  "scripts": {
+    "nice": "prettier -w *.js",
+    "predeploy": "git add --all && git commit --allow-empty -m $npm_package_version",
+    "deploy": "git push"
+  },
+  "files": [
+    "src/*"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ReneKrewinkel/design-tokens.git"
+    "url": "git+https://github.com/ReneKrewinkel/create-atomic-resources.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "GPL-1.0-only",
   "bugs": {
-    "url": "https://github.com/ReneKrewinkel/design-tokens/issues"
+    "url": "https://github.com/ReneKrewinkel/create-atomic-resources/issues"
   },
-  "homepage": "https://github.com/ReneKrewinkel/design-tokens#readme"
+  "homepage": "https://github.com/ReneKrewinkel/create-atomic-resources#readme"
 }
