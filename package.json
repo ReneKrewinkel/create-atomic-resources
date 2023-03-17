@@ -1,6 +1,6 @@
 {
   "name": "create-atomic-resources",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Creates a scss framework for use with atomic-bomb",
   "author": "René Krewinkel",
   "main": "bin/index.js",
