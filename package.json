@@ -1,6 +1,6 @@
 {
   "name": "create-atomic-resources",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Creates a scss framework for use with atomic-bomb",
   "author": "René Krewinkel",
   "main": "bin/index.js",
@@ -17,8 +17,7 @@
     "nice": "prettier -w bin/*.js",
     "deprecate": "npm deprecate atomic-bomb@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
     "predeploy": "git add --all && git commit --allow-empty  -m $npm_package_version",
-    "deploy": "git push -u origin main",
-    "postdeploy": "npm publish"
+    "deploy": "git push -u origin main"
   },
   "files": [
     "src/*"
