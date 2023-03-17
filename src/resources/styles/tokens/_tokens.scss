@@ -1,0 +1,123 @@
+$tokens: (
+  unit: rem,
+  page: (
+    backgroundColor: white,
+    margin: 0,
+    padding: 0
+  ),
+  colors: (
+    (
+      type: black,
+      color: #161616,
+      shades: ()
+    ),
+    (
+      type: black-muted,
+      color: rgba(0, 0, 0, 0.3),
+      shades: ()
+    ),
+    (
+      type: black-dim,
+      color: #f0f0f0,
+      shades: ()
+    ),
+    (
+      type: white,
+      color: #fff,
+      shades: ()
+    ),
+    (
+      type: white-muted,
+      color: rgba(255, 255, 255, 0.6),
+      shades: ()
+    )
+  ),
+  fonts: (
+    (
+      type: main-text-regular,
+      uri: '../fonts/futult-webfont',
+      sizes: (
+        12,
+        14,
+        16,
+        18,
+        20
+      )
+    ),
+    (
+      type: main-text-medium,
+      uri: '../fonts/futura_medium_bt-webfont',
+      sizes: (
+        12,
+        14,
+        16,
+        18,
+        20
+      )
+    ),
+    (
+      type: main-text-bold,
+      uri: '../fonts/futura_heavy_font-webfont',
+      sizes: (
+        12,
+        14,
+        16,
+        18,
+        20
+      )
+    ),
+    (
+      type: main-text-link,
+      uri: '../fonts/futult-webfont',
+      sizes: (
+        12,
+        14,
+        16
+      )
+    ),
+    (
+      type: label-text,
+      uri: '../fonts/futult-webfont',
+      sizes: (
+        12,
+        14,
+        16,
+        18,
+        20,
+        22,
+        24,
+        26,
+        28
+      )
+    )
+  ),
+  headings: (
+    type: heading,
+    uri: '../fonts/futura_medium_bt-webfont',
+    variant: (
+      (
+        h1: 32
+      ),
+      (
+        h2: 18
+      ),
+      (
+        h3: 18
+      ),
+      (
+        h4: 18
+      ),
+      (
+        h5: 16
+      ),
+      (
+        h6: 14
+      )
+    )
+  ),
+  spacing: (
+    small: 1,
+    medium: 2,
+    large: 3
+  )
+);

@@ -1,0 +1,22 @@
+@each $style in $fonts {
+  $type: map-get($style, 'type');
+  @each $s in map-get($style, 'sizes') {
+    $v: $type + '-' + $s;
+    .#{$v} {
+      font-family: quote($type);
+      font-size: pxToRem($s);
+    }
+  }
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
