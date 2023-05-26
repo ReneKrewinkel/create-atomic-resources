@@ -58,7 +58,7 @@ if (args.length < 1) {
   try {
     fs.ensureDir(currentDir)
     fs.copySync(templatePath, currentDir, { overwrite: true })
-    success(`Resources installed in ${currentDir}/resources`)
+    success(`Resources (resources, documentation, storybook-config) installed in ${currentDir}`)
     showCopyright()
   } catch (err) {
     error(err.message)
