@@ -1,0 +1,64 @@
+.DoDont {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    gap: 40px;
+}
+
+.container {
+    position: relative;
+}
+
+.container .notify {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    box-shadow: 0  0 8px 0 rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    background-color: #FFF;
+    font-weight: bold;
+    font-size: 22px;
+    padding: 4px;
+}
+
+.box {
+    border-radius: 10px;
+    box-shadow: 0  0 8px 0 rgba(0,0,0,0.15);
+}
+
+.box img {
+    background: #FFF;
+    box-shadow: 0  0 8px 0 rgba(0,0,0,0.15);
+}
+
+.box h1 {
+    text-transform: lowercase;
+    font-size: 22px;
+    /*background-color: rgba(255,255,255,0.6);*/
+    padding: 0 10px;
+    width: 120px;
+    /*text-align: center;*/
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.DoDont .do {
+    background-color: #92efa1;
+    padding: 20px;
+}
+
+.caption {
+    text-align: center;
+    margin-bottom: 0 !important;
+}
+
+
+.DoDont .dont {
+    background-color: #edaeae;
+    padding: 20px;
+}

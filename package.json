@@ -1,14 +1,15 @@
 {
   "name": "create-atomic-resources",
-  "version": "2.0.0",
-  "description": "Creates a scss framework for use with atomic-bomb",
+  "version": "2.1.0",
+  "description": "Creates a scss framework for use with atomic-bomb & Storybook templates",
   "author": "René Krewinkel",
   "main": "bin/index.js",
   "type": "module",
   "keywords": [
     "atomic design",
     "education",
-    "react"
+    "react",
+    "storybook"
   ],
   "bin": {
     "create-atomic-resources": "bin/index.js"
