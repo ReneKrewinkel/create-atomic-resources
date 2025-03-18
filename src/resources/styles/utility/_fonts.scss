@@ -9,6 +9,20 @@
   }
 }
 
+@mixin dynamic-text-regular($size) {
+  font-family: 'main-text-regular', sans-serif;
+  font-size: $size;
+}
+
+@mixin dynamic-text-bold($size) {
+  font-family: 'main-text-bold', sans-serif;
+  font-size: $size;
+}
+@mixin dynamic-text-generic($fontfamily, $size) {
+  font-family: $fontfamily, sans-serif;
+  font-size: $size;
+}
+
 .text-align-left {
   text-align: left;
 }
