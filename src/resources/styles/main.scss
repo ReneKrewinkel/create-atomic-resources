@@ -1,15 +1,15 @@
-@import 'functions';
-@import 'tokens';
-@import 'reset';
-@import 'fonts';
-@import 'root';
-@import 'page';
-@import 'utility';
-@import 'headings';
+@use 'functions';
+@use 'tokens';
+@use 'reset';
+@use 'fonts';
+@use 'root';
+@use 'page';
+@use 'utility';
+@use 'headings';
 
 /* Uncomment when using atomic-bomb */
-// @import '../../components/atoms';
-// @import '../../components/molecules';
-// @import '../../components/organisms';
-// @import '../../components/templates';
-// @import '../../components/pages';
+// @use '../../components/atoms';
+// @use '../../components/molecules';
+// @use '../../components/organisms';
+// @use '../../components/templates';
+// @use '../../components/pages';
