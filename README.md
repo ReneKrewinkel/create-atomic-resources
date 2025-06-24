@@ -36,9 +36,9 @@ npm i json-to-scss
 4. Uncomment when using [atomic-bomb](https://github.com/ReneKrewinkel/atomic-bomb) `<destination dir>/resources/styles/main.scss`: 
 ```scss
 /* Uncomment when using atomic-bomb */
-// @import '../../components/atoms';
-// @import '../../components/molecules';
-// @import '../../components/organisms';
-// @import '../../components/templates';
-// @import '../../components/pages';
+// @use '../../components/atoms';
+// @use '../../components/molecules';
+// @use '../../components/organisms';
+// @use '../../components/templates';
+// @use '../../components/pages';
 ```
