@@ -4,12 +4,12 @@
 $types: 'light', 'dark';
 
 @function strip-unit($num) {
-  @return $num / ($num * 0 + 1);
+  @return math.div($num, $num * 0 + 1);
 }
 
 @function pxToRem($pxValue) {
   @if $unit == 'rem' {
-    @return (($pxValue / 16) * 1rem);
+    @return (math.div($pxValue, 16) * 1rem);
   } @else {
     @return ($pxValue * 1px);
   }
