@@ -1,11 +1,11 @@
 /* Error: Undefined variable.
  *   ,
- * 1 | $unit: map-get($tokens, 'unit');
- *   |                ^^^^^^^
+ * 2 | @each $entry in $fonts {
+ *   |                 ^^^^^^
  *   '
- *   tokens/_config.scss 1:16  @use
- *   tokens/_index.scss 2:1    @use
- *   main.scss 2:1             root stylesheet */
+ *   fonts/_fonts.scss 2:17  @use
+ *   fonts/_index.scss 1:1   @use
+ *   main.scss 4:1           root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -15,5 +15,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 1 \2502  $unit: map-get($tokens, 'unit');\a   \2502                 ^^^^^^^\a   \2575 \a   tokens/_config.scss 1:16  @use\a   tokens/_index.scss 2:1    @use\a   main.scss 2:1             root stylesheet";
+  content: "Error: Undefined variable.\a   \2577 \a 2 \2502  @each $entry in $fonts {\a   \2502                  ^^^^^^\a   \2575 \a   fonts/_fonts.scss 2:17  @use\a   fonts/_index.scss 1:1   @use\a   main.scss 4:1           root stylesheet";
 }

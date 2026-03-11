@@ -36,6 +36,7 @@
     "chalk": "^5.1.2",
     "figlet": "^1.5.2",
     "fs-extra": "^10.1.0",
+    "npm-programmatic": "^0.0.12",
     "shelljs": "^0.8.5",
     "zod": "^3.19.1"
   }

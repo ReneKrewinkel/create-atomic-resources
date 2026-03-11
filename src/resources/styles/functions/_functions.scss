@@ -17,9 +17,9 @@ $types: 'light', 'dark';
 
 @function shade($type, $c, $percentage) {
   @if $type == 'light' {
-    @return (lighten($c, $percentage));
+    @return (lighten($c, $percentage * 1%));
   } @else {
-    @return (darken($c, $percentage));
+    @return (darken($c, $percentage * 1%));
   }
 }
 

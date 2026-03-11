@@ -1,8 +1,29 @@
-$unit: map-get($tokens, 'unit');
-$colors: map-get($tokens, 'colors');
-$fonts: map-get($tokens, 'fonts');
-$headings: map-get($tokens, 'headings');
-$page: map-get($tokens, 'page');
+@use 'sass:map';
+@use 'sass:list';
+@use 'tokens' as tokens;
 
-$color-types: 'bg' 'Background Color' 'background-color',
-  'fg' 'Foreground Color' 'color';
+$unit: map.get(tokens.$tokens, 'unit');
+$colors: map.get(tokens.$tokens, 'colors');
+$fonts: map.get(tokens.$tokens, 'fonts');
+$headings: map.get(tokens.$tokens, 'headings');
+$page: map.get(tokens.$tokens, 'page');
+
+$color-types: (
+                ('bg', 'Background Color', 'background-color'),
+                ('fg', 'Foreground Color', 'color')
+);
+
+@each $color-map in $colors {
+  $type: map.get($color-map, 'type');
+  $color: map.get($color-map, 'color');
+
+  @each $color-type in $color-types {
+    $prefix: list.nth($color-type, 1); // 'bg' or 'fg'
+    $label: list.nth($color-type, 2);  // for comments
+    $css-prop: list.nth($color-type, 3); // 'background-color' or 'color'
+
+    .#{$prefix}-#{$type} {
+      #{$css-prop}: #{$color};
+    }
+  }
+}

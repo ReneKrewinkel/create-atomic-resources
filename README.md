@@ -19,19 +19,11 @@ degit https://github.com/ReneKrewinkel/create-atomic-resources.git <destination 
 import "../<destination dir>/resources/styles/main.css"
 ```
 
-2. Install [json-to-scss](https://www.npmjs.com/package/json-to-scss):
-```shell 
-npm i json-to-scss
-```
+## UPDATE version 2.2.1
+`json-to-scss` and `sass` are now automatically installed.
 
-3. add a script to `package.json`: 
-```json
-{
-  "scripts": {
-    "token": "json-to-scss <destination dir>/resources/design/tokens.json <destination dir>/resources/styles/tokens/_tokens.scss"
-  }
-}
-```
+## UPDATE version 2.2.1
+`token` and `scss` script are now automatically added to `package.json`.
 
 4. Uncomment when using [atomic-bomb](https://github.com/ReneKrewinkel/atomic-bomb) `<destination dir>/resources/styles/main.scss`: 
 ```scss
