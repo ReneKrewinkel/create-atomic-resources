@@ -1,4 +1,4 @@
-import fs from "fs-extra";
+import fs from "node:fs";
 import path from "node:path";
 import { resourcesTemplatePath } from "./config.js";
 import { installDependencies } from "./package-manager.js";
@@ -16,8 +16,8 @@ export const installResources = async ({
 
   console.log(`\n🚀 Installing resources in ${currentDir}... ${cwd}`);
 
-  fs.ensureDirSync(destinationDir);
-  fs.copySync(templatePath, resourcesDir, { overwrite: true });
+  fs.mkdirSync(destinationDir, { recursive: true });
+  fs.cpSync(templatePath, resourcesDir, { force: true, recursive: true });
 
   await installDependencies(["json-to-scss", "sass", "prettier"], {
     dev: true,
