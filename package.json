@@ -16,12 +16,17 @@
   },
   "scripts": {
     "nice": "prettier -w bin/*.js",
+    "test": "node --check bin/index.js",
     "deprecate": "npm deprecate create-atomic-resources@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
-    "predeploy": "git add --all && git commit --allow-empty  -m $npm_package_version",
-    "deploy": "git push -u origin main"
+    "predeploy": "npm test && npm version patch",
+    "deploy": "git push --follow-tags"
   },
   "files": [
-    "src/*"
+    "bin/index.js",
+    "src/resources/**",
+    "!src/**/.DS_Store",
+    "!src/**/.sass-cache/**",
+    "!src/**/*.map"
   ],
   "repository": {
     "type": "git",
