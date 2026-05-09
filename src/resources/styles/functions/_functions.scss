@@ -1,3 +1,5 @@
+@use "../tokens/config" as config;
+@use "sass:color";
 @use "sass:map";
 @use "sass:math";
 
@@ -8,7 +10,7 @@ $types: 'light', 'dark';
 }
 
 @function pxToRem($pxValue) {
-  @if $unit == 'rem' {
+  @if config.$unit == 'rem' {
     @return (math.div($pxValue, 16) * 1rem);
   } @else {
     @return ($pxValue * 1px);
@@ -17,22 +19,22 @@ $types: 'light', 'dark';
 
 @function shade($type, $c, $percentage) {
   @if $type == 'light' {
-    @return (lighten($c, $percentage * 1%));
+    @return color.adjust($c, $lightness: $percentage * 1%);
   } @else {
-    @return (darken($c, $percentage * 1%));
+    @return color.adjust($c, $lightness: $percentage * -1%);
   }
 }
 
 @function rootColor($type, $key, $style) {
-  $color: map-get($style, 'color');
-  $shades: map-get($style, 'shades');
+  $color: map.get($style, 'color');
+  $shades: map.get($style, 'shades');
 
   $e: ();
 
   // Base Color
   $class: '--' + $key + '-' + $type;
   $base: ($class: $color);
-  $e: map-merge($e, $base);
+  $e: map.merge($e, $base);
 
   @each $t in $types {
     @each $shade in $shades {
@@ -40,7 +42,7 @@ $types: 'light', 'dark';
       $s: shade($t, $color, $shade);
       $class: '--' + $key + '-' + $type + '-' + $t + '-' + $shade;
       $q: ($class: $s);
-      $e: map-merge($e, $q);
+      $e: map.merge($e, $q);
     }
   }
 
@@ -48,9 +50,9 @@ $types: 'light', 'dark';
 }
 
 @function utilityColor($type, $key, $style) {
-  $type: map-get($style, 'type');
-  $color: map-get($style, 'color');
-  $shades: map-get($style, 'shades');
+  $type: map.get($style, 'type');
+  $color: map.get($style, 'color');
+  $shades: map.get($style, 'shades');
 
   $e: ();
 
@@ -58,7 +60,7 @@ $types: 'light', 'dark';
   $class: '.' + $key + '-' + $type;
   $var: 'var(--' + $key + '-' + $type + ')';
   $base: ($class: $var);
-  $e: map-merge($e, $base);
+  $e: map.merge($e, $base);
 
   /// Shades
   @each $t in $types {
@@ -66,10 +68,9 @@ $types: 'light', 'dark';
       $class: '.' + $key + '-' + $type + '-' + $t + '-' + $shade;
       $var: 'var(--' + $key + '-' + $type + '-' + $t + '-' + $shade + ')';
       $q: ($class: $var);
-      $e: map-merge($e, $q);
+      $e: map.merge($e, $q);
     }
   }
 
   @return ($e);
 }
-

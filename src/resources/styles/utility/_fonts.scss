@@ -1,10 +1,14 @@
-@each $style in $fonts {
-  $type: map-get($style, 'type');
-  @each $s in map-get($style, 'sizes') {
+@use '../functions/functions' as functions;
+@use '../tokens/config' as config;
+@use 'sass:map';
+
+@each $style in config.$fonts {
+  $type: map.get($style, 'type');
+  @each $s in map.get($style, 'sizes') {
     $v: $type + '-' + $s;
     .#{$v} {
-      font-family: quote($type);
-      font-size: pxToRem($s);
+      font-family: '#{$type}';
+      font-size: functions.pxToRem($s);
     }
   }
 }

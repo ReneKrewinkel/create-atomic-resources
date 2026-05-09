@@ -1,40 +1,40 @@
 $tokens: (
-  unit: rem,
+  unit: 'rem',
   page: (
-    backgroundColor: white,
+    backgroundColor: 'white',
     margin: 0,
     padding: 0
   ),
   colors: (
     (
-      type: black,
+      type: 'black',
       color: #161616,
       shades: ()
     ),
     (
-      type: black-muted,
+      type: 'black-muted',
       color: rgba(0, 0, 0, 0.3),
       shades: ()
     ),
     (
-      type: black-dim,
+      type: 'black-dim',
       color: #f0f0f0,
       shades: ()
     ),
     (
-      type: white,
+      type: 'white',
       color: #fff,
       shades: ()
     ),
     (
-      type: white-muted,
+      type: 'white-muted',
       color: rgba(255, 255, 255, 0.6),
       shades: ()
     )
   ),
   fonts: (
     (
-      type: main-text-regular,
+      type: 'main-text-regular',
       uri: '../fonts/futult-webfont',
       sizes: (
         12,
@@ -45,7 +45,7 @@ $tokens: (
       )
     ),
     (
-      type: main-text-medium,
+      type: 'main-text-medium',
       uri: '../fonts/futura_medium_bt-webfont',
       sizes: (
         12,
@@ -56,7 +56,7 @@ $tokens: (
       )
     ),
     (
-      type: main-text-bold,
+      type: 'main-text-bold',
       uri: '../fonts/futura_heavy_font-webfont',
       sizes: (
         12,
@@ -67,7 +67,7 @@ $tokens: (
       )
     ),
     (
-      type: main-text-link,
+      type: 'main-text-link',
       uri: '../fonts/futult-webfont',
       sizes: (
         12,
@@ -76,7 +76,7 @@ $tokens: (
       )
     ),
     (
-      type: label-text,
+      type: 'label-text',
       uri: '../fonts/futult-webfont',
       sizes: (
         12,
@@ -92,7 +92,7 @@ $tokens: (
     )
   ),
   headings: (
-    type: heading,
+    type: 'heading',
     uri: '../fonts/futura_medium_bt-webfont',
     variant: (
       (

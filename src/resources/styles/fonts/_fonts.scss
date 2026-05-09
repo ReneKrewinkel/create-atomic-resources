@@ -1,7 +1,10 @@
+@use '../tokens/config' as config;
+@use 'sass:map';
+
 /** FONTS **/
-@each $entry in $fonts {
-  $type: map-get($entry, 'type');
-  $uri: map-get($entry, 'uri');
+@each $entry in config.$fonts {
+  $type: map.get($entry, 'type');
+  $uri: map.get($entry, 'uri');
   /*! #{$type} */
   @font-face {
     font-family: '#{$type}';

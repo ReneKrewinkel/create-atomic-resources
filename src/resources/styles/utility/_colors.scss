@@ -1,19 +1,23 @@
+@use '../functions/functions' as functions;
+@use '../tokens/config' as config;
+@use 'sass:map';
+
 /** UTILITY: Colors **/
-@each $ct, $cd, $cp in $color-types {
+@each $ct, $cd, $cp in config.$color-types {
   /*! #{$cd} */
-  @each $style in $colors {
-    $type: map-get($style, 'type');
+  @each $style in config.$colors {
+    $type: map.get($style, 'type');
 
     /*! #{$type} */
-    $shades: utilityColor($type, $ct, $style);
+    $shades: functions.utilityColor($type, $ct, $style);
     @each $shade, $value in $shades {
       @if $ct == 'bg' {
         #{$shade} {
-          background-color: unquote($value);
+          background-color: #{$value};
         }
       } @else {
         #{$shade} {
-          color: unquote($value);
+          color: #{$value};
         }
       }
     }

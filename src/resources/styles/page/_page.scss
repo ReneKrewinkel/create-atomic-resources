@@ -1,6 +1,9 @@
+@use '../tokens/config' as config;
+@use 'sass:map';
+
 body {
-  margin: map-get($page, 'margin');
-  padding: map-get($page, 'padding');
-  background-color: var(--bg- + map-get($page, 'backgroundColor'));
+  margin: map.get(config.$page, 'margin');
+  padding: map.get(config.$page, 'padding');
+  background-color: var(--bg-#{map.get(config.$page, 'backgroundColor')});
   font-family: 'main-text-regular';
 }

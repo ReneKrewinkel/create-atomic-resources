@@ -1,5 +1,8 @@
-$h_type: map-get($headings, 'type');
-$h_uri: map-get($headings, 'uri');
+@use '../tokens/config' as config;
+@use 'sass:map';
+
+$h_type: map.get(config.$headings, 'type');
+$h_uri: map.get(config.$headings, 'uri');
 /*! heading */
 @font-face {
   font-family: '#{$h_type}';
