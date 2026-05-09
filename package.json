@@ -1,42 +1,11 @@
 {
-  "name": "create-atomic-resources",
-  "version": "2.1.6",
-  "description": "Creates a scss framework for use with atomic-bomb & Storybook templates",
   "author": "René Krewinkel",
-  "main": "bin/index.js",
-  "type": "module",
-  "keywords": [
-    "atomic design",
-    "education",
-    "react",
-    "storybook"
-  ],
   "bin": {
     "create-atomic-resources": "bin/index.js"
   },
-  "scripts": {
-    "nice": "prettier -w bin/*.js",
-    "test": "node --check bin/index.js",
-    "deprecate": "npm deprecate create-atomic-resources@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
-    "predeploy": "npm test && npm version patch",
-    "deploy": "git push --follow-tags"
-  },
-  "files": [
-    "bin/index.js",
-    "src/resources/**",
-    "!src/**/.DS_Store",
-    "!src/**/.sass-cache/**",
-    "!src/**/*.map"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ReneKrewinkel/create-atomic-resources.git"
-  },
-  "license": "GPL-1.0-only",
   "bugs": {
     "url": "https://github.com/ReneKrewinkel/create-atomic-resources/issues"
   },
-  "homepage": "https://github.com/ReneKrewinkel/create-atomic-resources#readme",
   "dependencies": {
     "chalk": "^5.1.2",
     "figlet": "^1.5.2",
@@ -44,5 +13,36 @@
     "npm-programmatic": "^0.0.12",
     "shelljs": "^0.8.5",
     "zod": "^3.19.1"
-  }
+  },
+  "description": "Creates a scss framework for use with atomic-bomb & Storybook templates",
+  "files": [
+    "bin/index.js",
+    "src/resources/**",
+    "!src/**/.DS_Store",
+    "!src/**/.sass-cache/**",
+    "!src/**/*.map"
+  ],
+  "homepage": "https://github.com/ReneKrewinkel/create-atomic-resources#readme",
+  "keywords": [
+    "atomic design",
+    "education",
+    "react",
+    "storybook"
+  ],
+  "license": "GPL-1.0-only",
+  "main": "bin/index.js",
+  "name": "create-atomic-resources",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ReneKrewinkel/create-atomic-resources.git"
+  },
+  "scripts": {
+    "deploy": "git push --follow-tags",
+    "deprecate": "npm deprecate create-atomic-resources@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
+    "nice": "prettier -w bin/*.js",
+    "predeploy": "npm test && npm version patch",
+    "test": "node --check bin/index.js"
+  },
+  "type": "module",
+  "version": "3.1.1"
 }
