@@ -43,7 +43,7 @@ const error = (msg) => {
   process.exit(1);
 };
 
-const success = (msg) => console.log(chalk.greenBright(`🤙 ${msg}`))
+const success = (msg) => console.log(chalk.greenBright(`🤙 ${msg}`));
 
 const usage = () => {
   const msg = `USAGE: npx ${appName} <destination dir>`;
@@ -51,33 +51,27 @@ const usage = () => {
   process.exit(2);
 };
 
-/// TEST
 const addScriptsToPackageJson = async (scripts, cwd = process.cwd()) => {
-  const packageJsonPath = path.join(cwd, 'package.json');
+  const packageJsonPath = path.join(cwd, "package.json");
 
-  // Read and parse package.json
-  const packageJsonRaw = await fs.readFile(packageJsonPath, 'utf-8');
+  const packageJsonRaw = await fs.readFile(packageJsonPath, "utf-8");
   const packageJson = JSON.parse(packageJsonRaw);
 
-  // Ensure scripts section exists
   packageJson.scripts = packageJson.scripts || {};
 
-  // Add or update scripts
   for (const [scriptName, scriptCommand] of Object.entries(scripts)) {
     packageJson.scripts[scriptName] = scriptCommand;
     success(`Added script "${scriptName}": "${scriptCommand}"`);
   }
 
-  // Write back to package.json with pretty formatting
   await fs.writeFile(
     packageJsonPath,
-    JSON.stringify(packageJson, null, 2) + '\n', // trailing newline
-    'utf-8'
+    `${JSON.stringify(packageJson, null, 2)}\n`,
+    "utf-8",
   );
 
   success(`package.json updated`);
-}
-/// TEST
+};
 
 const execAsync = promisify(exec);
 
@@ -104,55 +98,82 @@ const detectPackageManager = async (cwd = process.cwd()) => {
 
 const installDependencies = async (packages, options = {}) => {
   const { dev = false, cwd = process.cwd() } = options;
-
   const packageManager = await detectPackageManager(cwd);
+  const packageList = packages.join(" ");
+  const npmDevFlag = dev ? "--save-dev" : "";
 
   let installCommand = "";
 
   switch (packageManager) {
     case "pnpm":
-      installCommand = `pnpm add ${dev ? "-D" : ""} ${packages.join(" ")}`;
+      installCommand = `pnpm add ${dev ? "-D" : ""} ${packageList}`;
       break;
     case "yarn":
-      installCommand = `yarn add ${dev ? "-D" : ""} ${packages.join(" ")}`;
+      installCommand = `yarn add ${dev ? "-D" : ""} ${packageList}`;
       break;
     case "npm":
     default:
-      installCommand = `npm install ${dev ? "--save-dev" : ""} ${packages.join(" ")}`;
+      installCommand = `npm install ${npmDevFlag} ${packageList}`;
       break;
   }
 
   console.log(`📦 Installing dependencies with ${packageManager}...`);
-  await execAsync(installCommand, { cwd });
+
+  try {
+    await execAsync(installCommand, { cwd });
+  } catch (err) {
+    if (packageManager !== "npm" || !err.stderr?.includes("ERESOLVE")) {
+      throw err;
+    }
+
+    console.warn(
+      "⚠️ npm detected a peer dependency conflict. Retrying with --legacy-peer-deps...",
+    );
+    await execAsync(
+      `npm install ${npmDevFlag} --legacy-peer-deps ${packageList}`,
+      { cwd },
+    );
+  }
+
   success(`Install of ${packages.join(", ")} complete`);
 };
 
+const main = async () => {
+  const args = process.argv.slice(2);
+  if (args.length < 1) usage();
 
-const args = process.argv.slice(2);
-if (args.length < 1) {
-  usage();
-} else {
   const homeDir = process.cwd();
   const currentDir = `./${args[0].replace("./", "")}`;
   console.log(`\n🚀 Installing resources in ${currentDir}... ${homeDir}`);
+
   try {
-    fs.ensureDir(currentDir);
+    fs.ensureDirSync(currentDir);
     fs.copySync(templatePath, currentDir, { overwrite: true });
-    installDependencies(['json-to-scss', 'sass', 'prettier'], {
+
+    await installDependencies(["json-to-scss", "sass", "prettier"], {
       dev: true,
       cwd: homeDir,
-    }).then(() => success(`Resources (token, fonts, scss) installed in ${currentDir}/resources`))
-      .then(() => {
-        addScriptsToPackageJson({
-          "token": "json-to-scss ./src/resources/design/tokens.json ./src/resources/styles/tokens/_tokens.scss",
-          "scss": "sass --quiet ./src/resources/styles/main.scss ./src/resources/styles/main.css",
-          "nice": "prettier -w ./src/**",
-        }, homeDir).then();
-      })
-      .finally(() => showCopyright())
+    });
+    success(
+      `Resources (token, fonts, scss) installed in ${currentDir}/resources`,
+    );
 
+    await addScriptsToPackageJson(
+      {
+        token:
+          "json-to-scss ./src/resources/design/tokens.json ./src/resources/styles/tokens/_tokens.scss",
+        scss: "sass --quiet ./src/resources/styles/main.scss ./src/resources/styles/main.css",
+        nice: "prettier -w ./src/**",
+      },
+      homeDir,
+    );
   } catch (err) {
-    error(err.message);
+    console.log(chalk.red(`💀 ${err.stderr || err.message}`));
     showCopyright();
+    process.exit(1);
   }
-}
+
+  showCopyright();
+};
+
+main();
