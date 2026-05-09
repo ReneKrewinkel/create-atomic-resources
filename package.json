@@ -17,6 +17,7 @@
   "description": "Creates a scss framework for use with atomic-bomb & Storybook templates",
   "files": [
     "bin/index.js",
+    "src/*.js",
     "src/resources/**",
     "!src/**/.DS_Store",
     "!src/**/.sass-cache/**",
@@ -39,9 +40,9 @@
   "scripts": {
     "deploy": "git push --follow-tags",
     "deprecate": "npm deprecate create-atomic-resources@\"<$(echo $npm_package_version|cut -d v  -f 2)\" \"Please upgrade\"",
-    "nice": "prettier -w bin/*.js",
+    "nice": "prettier -w bin/*.js src/*.js _tests_/*.js",
     "predeploy": "npm test && npm version patch",
-    "test": "node --check bin/index.js"
+    "test": "node --test _tests_/*.test.js"
   },
   "type": "module",
   "version": "3.1.2"

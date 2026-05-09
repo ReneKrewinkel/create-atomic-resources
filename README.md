@@ -42,7 +42,6 @@ src/
         ├── tokens/
         ├── utility/
         ├── vars/
-        ├── main.css
         └── main.scss
 ```
 
@@ -87,7 +86,7 @@ If you install into a different destination directory, adjust the import path to
 
 ## Design Tokens
 
-The generated tokens live in:
+The design token file should live in:
 
 ```text
 src/resources/design/tokens.json
