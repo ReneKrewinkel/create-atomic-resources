@@ -1,6 +1,9 @@
 name: "🚀 NPM Publish"
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -27,7 +30,11 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Validate package contents
+        run: npm pack --dry-run
+
       - name: Check npm version
+        if: github.event_name != 'pull_request'
         id: npm-version
         run: |
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
@@ -40,7 +47,7 @@ jobs:
           fi
 
       - name: Check npm auth token
-        if: steps.npm-version.outputs.published == 'false'
+        if: github.event_name != 'pull_request' && steps.npm-version.outputs.published == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -48,9 +55,16 @@ jobs:
             echo "::error title=Missing NPM_TOKEN::Add an npm automation token as the NPM_TOKEN repository secret."
             exit 1
           fi
+          npm whoami --registry=https://registry.npmjs.org/
+
+      - name: Explain first publish requirements
+        if: github.event_name != 'pull_request' && steps.npm-version.outputs.published == 'false'
+        run: |
+          echo "Publishing a new package name requires an npm token that can create packages."
+          echo "If npm publish returns E404 for PUT /create-atomic-resources, replace NPM_TOKEN with an npm automation token from the owning npm account."
 
       - name: Publish
-        if: steps.npm-version.outputs.published == 'false'
+        if: github.event_name != 'pull_request' && steps.npm-version.outputs.published == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --provenance
