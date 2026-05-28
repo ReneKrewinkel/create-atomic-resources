@@ -19,12 +19,12 @@ export const installResources = async ({
   fs.mkdirSync(destinationDir, { recursive: true });
   fs.cpSync(templatePath, resourcesDir, { force: true, recursive: true });
 
+  success(`Resources (token, fonts, scss) installed in ${resourcesDir}`);
+
+  await addScriptsToPackageJson(resourceScripts, cwd);
+
   await installDependencies(["json-to-scss", "sass", "prettier"], {
     dev: true,
     cwd,
   });
-
-  success(`Resources (token, fonts, scss) installed in ${resourcesDir}`);
-
-  await addScriptsToPackageJson(resourceScripts, cwd);
 };
