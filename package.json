@@ -24,7 +24,7 @@
     "storybook"
   ],
   "license": "GPL-1.0-only",
-  "main": "bin/index.js",
+  "main": "src/index.js",
   "name": "create-atomic-resources",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

@@ -14,6 +14,7 @@ import {
 
 const repoRoot = path.resolve(new URL("..", import.meta.url).pathname);
 const cliPath = path.join(repoRoot, "bin/index.js");
+const packageEntryPath = path.join(repoRoot, "src/index.js");
 
 const makeTempDir = () =>
   fs.mkdtempSync(path.join(os.tmpdir(), "create-atomic-resources-"));
@@ -278,4 +279,16 @@ test("cli runs when invoked through an npm bin symlink", () => {
     fs.readFileSync(npmLogPath, "utf8"),
     "install --save-dev json-to-scss sass prettier\n",
   );
+});
+
+test("package entrypoint can be imported without running the cli", async () => {
+  const dir = makeTempDir();
+  writePackageJson(dir);
+
+  const imported = await import(
+    `${packageEntryPath}?cacheBust=${Date.now()}-${Math.random()}`
+  );
+
+  assert.equal(typeof imported.runCli, "function");
+  assert.equal(fs.existsSync(path.join(dir, "src/resources")), false);
 });
