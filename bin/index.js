@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { runCli } from "../src/cli.js";
@@ -14,10 +15,10 @@ export {
 export { installResources } from "../src/installer.js";
 export { runCli };
 
+const realpath = (filePath) => fs.realpathSync.native(path.resolve(filePath));
+const currentFile = realpath(fileURLToPath(import.meta.url));
 const isDirectRun =
-  process.argv[1] &&
-  path.resolve(process.argv[1]) ===
-    path.resolve(fileURLToPath(import.meta.url));
+  process.argv[1] && realpath(process.argv[1]) === currentFile;
 
 if (isDirectRun) {
   runCli();

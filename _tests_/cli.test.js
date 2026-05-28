@@ -33,6 +33,17 @@ const writePackageJson = (dir, packageJson = {}) => {
   );
 };
 
+const writeFakeNpm = (binDir, npmLogPath) => {
+  fs.writeFileSync(
+    path.join(binDir, "npm"),
+    `#!/usr/bin/env node
+const fs = require("node:fs");
+fs.appendFileSync(${JSON.stringify(npmLogPath)}, process.argv.slice(2).join(" ") + "\\n");
+`,
+    { mode: 0o755 },
+  );
+};
+
 const silenceConsole = async (fn) => {
   const originalLog = console.log;
   const originalWarn = console.warn;
@@ -198,14 +209,7 @@ test("cli copies resources, installs dependencies, and adds package scripts", ()
 
   writePackageJson(dir);
   fs.mkdirSync(binDir);
-  fs.writeFileSync(
-    path.join(binDir, "npm"),
-    `#!/usr/bin/env node
-const fs = require("node:fs");
-fs.appendFileSync(${JSON.stringify(npmLogPath)}, process.argv.slice(2).join(" ") + "\\n");
-`,
-    { mode: 0o755 },
-  );
+  writeFakeNpm(binDir, npmLogPath);
 
   const result = spawnSync(process.execPath, [cliPath, "./src"], {
     cwd: dir,
@@ -243,4 +247,35 @@ fs.appendFileSync(${JSON.stringify(npmLogPath)}, process.argv.slice(2).join(" ")
     "sass --quiet ./src/resources/styles/main.scss ./src/resources/styles/main.css",
   );
   assert.equal(packageJson.scripts.nice, "prettier -w ./src/**");
+});
+
+test("cli runs when invoked through an npm bin symlink", () => {
+  const dir = makeTempDir();
+  const binDir = path.join(dir, "bin");
+  const npmLogPath = path.join(dir, "npm-args.txt");
+  const symlinkPath = path.join(binDir, "create-atomic-resources");
+
+  writePackageJson(dir);
+  fs.mkdirSync(binDir);
+  writeFakeNpm(binDir, npmLogPath);
+  fs.symlinkSync(cliPath, symlinkPath);
+
+  const result = spawnSync(process.execPath, [symlinkPath, "./src"], {
+    cwd: dir,
+    env: {
+      ...process.env,
+      PATH: `${binDir}${path.delimiter}${process.env.PATH}`,
+    },
+    encoding: "utf8",
+  });
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/styles/main.scss")),
+    true,
+  );
+  assert.equal(
+    fs.readFileSync(npmLogPath, "utf8"),
+    "install --save-dev json-to-scss sass prettier\n",
+  );
 });
