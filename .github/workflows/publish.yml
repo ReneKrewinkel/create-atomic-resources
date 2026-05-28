@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
+          always-auth: true
 
       - name: Test
         run: npm test
@@ -55,7 +56,10 @@ jobs:
             echo "::error title=Missing NPM_TOKEN::Add an npm automation token as the NPM_TOKEN repository secret."
             exit 1
           fi
-          npm whoami --registry=https://registry.npmjs.org/
+          if ! npm whoami --registry=https://registry.npmjs.org/; then
+            echo "::error title=Invalid NPM_TOKEN::npm rejected the NPM_TOKEN secret. Replace it with a valid npm automation token from the account that should own create-atomic-resources."
+            exit 1
+          fi
 
       - name: Explain first publish requirements
         if: github.event_name != 'pull_request' && steps.npm-version.outputs.published == 'false'
