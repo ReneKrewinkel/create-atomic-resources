@@ -1,18 +1,19 @@
-@use '../tokens/config' as config;
-@use 'sass:map';
+@use "../tokens/config" as config;
+@use "sass:map";
 
 $fonts: config.$fonts !default;
-
+/** Fix #6  **/
 /** FONTS **/
 @if $fonts {
   @each $entry in $fonts {
-    $type: map.get($entry, 'type');
-    $uri: map.get($entry, 'uri');
+    $type: map.get($entry, "type");
+    $uri: map.get($entry, "uri");
     /*! #{$type} */
     @font-face {
-      font-family: '#{$type}';
-      src: url($uri + '.woff') format('woff'),
-        /* Modern Browsers */ url($uri + '.woff2') format('woff2'),
+      font-family: "#{$type}";
+      src:
+        url($uri + ".woff") format("woff"),
+        /* Modern Browsers */ url($uri + ".woff2") format("woff2"),
         /* Modern Browsers */;
     }
   }
