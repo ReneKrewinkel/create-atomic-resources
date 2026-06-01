@@ -1,4 +1,4 @@
-# create-atomic-resources
+# Atomic Resources
 
 Creates a reusable SCSS resources setup for projects that use atomic design, Storybook, and optionally [atomic-bomb](https://github.com/ReneKrewinkel/atomic-bomb).
 
@@ -132,6 +132,18 @@ When using the generated resources together with `atomic-bomb`, uncomment the co
 //@use '../../components/templates';
 //@use '../../components/pages';
 ```
+
+Those imports point at the Sass barrel files that `atomic-bomb` creates in each component folder:
+
+```text
+src/components/atoms/_index.scss
+src/components/molecules/_index.scss
+src/components/organisms/_index.scss
+src/components/templates/_index.scss
+src/components/pages/_index.scss
+```
+
+When `atomic-bomb` creates a component, it appends that component to the matching `_index.scss` barrel. When a generated component is removed with `atomic-bomb --remove [NAME]`, the matching Sass barrel entry is removed as well, so the resource imports in `main.scss` can stay stable.
 
 ## Manual Installation
 
