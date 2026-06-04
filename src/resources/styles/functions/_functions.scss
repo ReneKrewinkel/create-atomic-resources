@@ -9,7 +9,23 @@ $types: 'light', 'dark';
   @return math.div($num, $num * 0 + 1);
 }
 
+@function fontSizeClassToken($size) {
+  @if math.is-unitless($size) {
+    @return $size;
+  }
+
+  @if math.unit($size) == 'rem' {
+    @return strip-unit($size) * 16;
+  }
+
+  @return strip-unit($size);
+}
+
 @function pxToRem($pxValue) {
+  @if not math.is-unitless($pxValue) {
+    @return $pxValue;
+  }
+
   @if config.$unit == 'rem' {
     @return (math.div($pxValue, 16) * 1rem);
   } @else {

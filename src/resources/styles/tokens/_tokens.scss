@@ -37,57 +37,57 @@ $tokens: (
       type: 'main-text-regular',
       uri: '../fonts/futult-webfont',
       sizes: (
-        12,
-        14,
-        16,
-        18,
-        20
+        0.75rem,
+        0.875rem,
+        1rem,
+        1.125rem,
+        1.25rem
       )
     ),
     (
       type: 'main-text-medium',
       uri: '../fonts/futura_medium_bt-webfont',
       sizes: (
-        12,
-        14,
-        16,
-        18,
-        20
+        0.75rem,
+        0.875rem,
+        1rem,
+        1.125rem,
+        1.25rem
       )
     ),
     (
       type: 'main-text-bold',
       uri: '../fonts/futura_heavy_font-webfont',
       sizes: (
-        12,
-        14,
-        16,
-        18,
-        20
+        0.75rem,
+        0.875rem,
+        1rem,
+        1.125rem,
+        1.25rem
       )
     ),
     (
       type: 'main-text-link',
       uri: '../fonts/futult-webfont',
       sizes: (
-        12,
-        14,
-        16
+        0.75rem,
+        0.875rem,
+        1rem
       )
     ),
     (
       type: 'label-text',
       uri: '../fonts/futult-webfont',
       sizes: (
-        12,
-        14,
-        16,
-        18,
-        20,
-        22,
-        24,
-        26,
-        28
+        0.75rem,
+        0.875rem,
+        1rem,
+        1.125rem,
+        1.25rem,
+        1.375rem,
+        1.5rem,
+        1.625rem,
+        1.75rem
       )
     )
   ),
@@ -96,22 +96,22 @@ $tokens: (
     uri: '../fonts/futura_medium_bt-webfont',
     variant: (
       (
-        h1: 32
+        h1: 2rem
       ),
       (
-        h2: 18
+        h2: 1.125rem
       ),
       (
-        h3: 18
+        h3: 1.125rem
       ),
       (
-        h4: 18
+        h4: 1.125rem
       ),
       (
-        h5: 16
+        h5: 1rem
       ),
       (
-        h6: 14
+        h6: 0.875rem
       )
     )
   ),
@@ -119,5 +119,63 @@ $tokens: (
     small: 1,
     medium: 2,
     large: 3
+  ),
+  borderRadius: (
+    small: 4,
+    medium: 8,
+    large: 12
+  ),
+  boxShadow: (
+    light: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+    medium: '0px 4px 6px rgba(0, 0, 0, 0.3)',
+    heavy: '0px 10px 20px rgba(0, 0, 0, 0.4)'
+  ),
+  semanticColors: (
+    success: #2e7d32,
+    warning: #ed6c02,
+    danger: #d32f2f,
+    info: #0288d1
+  ),
+  zIndex: (
+    base: 0,
+    dropdown: 100,
+    sticky: 200,
+    modal: 1000,
+    toast: 1100
+  ),
+  opacity: (
+    disabled: 0.4,
+    muted: 0.64,
+    overlay: 0.72
+  ),
+  forms: (
+    input: (
+      height: 2.5rem,
+      padding-x: 0.75rem,
+      padding-y: 0.5rem,
+      border: 1px solid #d0d0d0,
+      border-bottom: 1px solid #d0d0d0,
+      border-radius: 0.5rem,
+      background-color: #fff,
+      text-color: #161616,
+      placeholder-color: rgba(0, 0, 0, 0.45)
+    ),
+    focus: (
+      border: 1px solid #0288d1,
+      border-bottom: 1px solid #0288d1,
+      outline-color: rgba(2, 136, 209, 0.32),
+      outline-width: 0.1875rem
+    ),
+    disabled: (
+      background-color: #f0f0f0,
+      border: 1px solid #d8d8d8,
+      border-bottom: 1px solid #d8d8d8,
+      text-color: rgba(0, 0, 0, 0.45)
+    ),
+    error: (
+      border: 1px solid #d32f2f,
+      border-bottom: 1px solid #d32f2f,
+      text-color: #d32f2f
+    )
   )
 );

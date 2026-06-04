@@ -9,3 +9,45 @@
 .is-column {
   flex-direction: column;
 }
+
+@mixin flex-position($vertical, $horizontal) {
+  display: flex;
+  align-items: $vertical;
+  justify-content: $horizontal;
+}
+
+@mixin flex-top-left {
+  @include flex-position(flex-start, flex-start);
+}
+
+@mixin flex-top-center {
+  @include flex-position(flex-start, center);
+}
+
+@mixin flex-top-right {
+  @include flex-position(flex-start, flex-end);
+}
+
+@mixin flex-center-left {
+  @include flex-position(center, flex-start);
+}
+
+@mixin flex-center-center {
+  @include flex-position(center, center);
+}
+
+@mixin flex-center-right {
+  @include flex-position(center, flex-end);
+}
+
+@mixin flex-bottom-left {
+  @include flex-position(flex-end, flex-start);
+}
+
+@mixin flex-bottom-center {
+  @include flex-position(flex-end, center);
+}
+
+@mixin flex-bottom-right {
+  @include flex-position(flex-end, flex-end);
+}

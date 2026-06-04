@@ -5,7 +5,7 @@
 @each $style in config.$fonts {
   $type: map.get($style, 'type');
   @each $s in map.get($style, 'sizes') {
-    $v: $type + '-' + $s;
+    $v: $type + '-' + functions.fontSizeClassToken($s);
     .#{$v} {
       font-family: '#{$type}';
       font-size: functions.pxToRem($s);
