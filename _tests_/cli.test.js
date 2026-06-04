@@ -281,6 +281,97 @@ test("cli runs when invoked through an npm bin symlink", () => {
   );
 });
 
+test("bundled resources expose layout tokens as root custom properties", () => {
+  const rootScss = fs.readFileSync(
+    path.join(repoRoot, "src/resources/styles/root/_root.scss"),
+    "utf8",
+  );
+  const mainCss = fs.readFileSync(
+    path.join(repoRoot, "src/resources/styles/main.css"),
+    "utf8",
+  );
+
+  assert.match(rootScss, /--spacing-#\{\$type\}/);
+  assert.match(rootScss, /--border-radius-#\{\$type\}/);
+  assert.match(rootScss, /--box-shadow-#\{\$type\}/);
+  assert.match(mainCss, /--spacing-small: 1rem;/);
+  assert.match(mainCss, /--border-radius-medium: 0\.5rem;/);
+  assert.match(mainCss, /--semantic-color-danger: #d32f2f;/);
+  assert.match(mainCss, /--z-index-modal: 1000;/);
+  assert.match(mainCss, /--opacity-disabled: 0\.4;/);
+  assert.match(mainCss, /--form-input-border: 1px solid #d0d0d0;/);
+  assert.match(
+    mainCss,
+    /--form-input-border-bottom: 1px solid #d0d0d0;/,
+  );
+  assert.match(
+    mainCss,
+    /--box-shadow-heavy: 0px 10px 20px rgba\(0, 0, 0, 0\.4\);/,
+  );
+});
+
+test("font size tokens are stored as rem values", () => {
+  const tokens = JSON.parse(
+    fs.readFileSync(
+      path.join(repoRoot, "src/resources/design/tokens.json"),
+      "utf8",
+    ),
+  );
+
+  const fontSizes = tokens.fonts.flatMap((font) => font.sizes);
+  const headingSizes = tokens.headings.variant.flatMap((heading) =>
+    Object.values(heading),
+  );
+  const mainCss = fs.readFileSync(
+    path.join(repoRoot, "src/resources/styles/main.css"),
+    "utf8",
+  );
+
+  [...fontSizes, ...headingSizes].forEach((size) => {
+    assert.equal(typeof size, "string");
+    assert.match(size, /^\d+(\.\d+)?rem$/);
+  });
+  assert.match(mainCss, /\.main-text-regular-12/);
+  assert.match(mainCss, /font-size: 0\.75rem;/);
+  assert.match(mainCss, /h1 \{\n  font-family: "heading";\n  font-size: 2rem;/);
+});
+
+test("utility module exposes flex position mixins", () => {
+  const dir = makeTempDir();
+  const inputPath = path.join(dir, "mixins.scss");
+  const outputPath = path.join(dir, "mixins.css");
+
+  fs.writeFileSync(
+    inputPath,
+    [
+      `@use "${path.join(repoRoot, "src/resources/styles/utility")}" as utility;`,
+      ".center { @include utility.flex-center-center; }",
+      ".top-right { @include utility.flex-top-right; }",
+      "",
+    ].join("\n"),
+  );
+
+  const result = spawnSync(
+    "npx",
+    ["sass", "--quiet", "--no-source-map", inputPath, outputPath],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+    },
+  );
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const css = fs.readFileSync(outputPath, "utf8");
+
+  assert.match(css, /\.center/);
+  assert.match(css, /align-items: center;/);
+  assert.match(css, /justify-content: center;/);
+  assert.match(css, /\.top-right/);
+  assert.match(css, /align-items: flex-start;/);
+  assert.match(css, /justify-content: flex-end;/);
+});
+
 test("package entrypoint can be imported without running the cli", async () => {
   const dir = makeTempDir();
   writePackageJson(dir);

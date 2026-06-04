@@ -23,5 +23,42 @@
     --#{$type}: '#{$type}';
   }
 
+  /** SPACING **/
+  @each $type, $value in config.$spacing {
+    --spacing-#{$type}: #{$value}#{config.$unit};
+  }
+
+  /** BORDER RADIUS **/
+  @each $type, $value in config.$border-radius {
+    --border-radius-#{$type}: #{functions.pxToRem($value)};
+  }
+
+  /** BOX SHADOW **/
+  @each $type, $value in config.$box-shadow {
+    --box-shadow-#{$type}: #{$value};
+  }
+
+  /** SEMANTIC COLORS **/
+  @each $type, $value in config.$semantic-colors {
+    --semantic-color-#{$type}: #{$value};
+  }
+
+  /** Z-INDEX **/
+  @each $type, $value in config.$z-index {
+    --z-index-#{$type}: #{$value};
+  }
+
+  /** OPACITY **/
+  @each $type, $value in config.$opacity {
+    --opacity-#{$type}: #{$value};
+  }
+
+  /** FORMS **/
+  @each $group, $tokens in config.$forms {
+    @each $type, $value in $tokens {
+      --form-#{$group}-#{$type}: #{$value};
+    }
+  }
+
   --transition: all 0.4s ease;
 }

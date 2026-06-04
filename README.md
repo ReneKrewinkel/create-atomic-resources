@@ -1,8 +1,14 @@
-# Atomic Resources
 
 Creates a reusable SCSS resources setup for projects that use atomic design, Storybook, and optionally [atomic-bomb](https://github.com/ReneKrewinkel/atomic-bomb).
 
-> **Important** This tool is for educational purposes only.
+<div align="center">
+<img src="./promo-atomic-resources.png" style="width: 420px;" alt="Atomic Bomb">
+
+![Rust](https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=flat-square)
+![Neovim](https://img.shields.io/badge/Neovim-0.9%2B-57A143?logo=neovim&logoColor=white)
+
+</div>
+
 
 ## Usage
 
@@ -30,6 +36,7 @@ This creates or updates:
 src/
 └── resources/
     ├── design/
+    │   ├── tokens.example.json
     │   └── tokens.json
     ├── fonts/
     └── styles/
@@ -66,6 +73,152 @@ The generated scripts are:
 }
 ```
 
+## The Design Token
+
+The design token file is the source of truth for the generated SCSS token map:
+
+```text
+src/resources/design/tokens.json
+```
+
+The `token` script converts that JSON file into:
+
+```text
+src/resources/styles/tokens/_tokens.scss
+```
+
+The generated `_tokens.scss` file exports a `$tokens` map. `src/resources/styles/tokens/_config.scss` reads that map and exposes typed SCSS variables such as `$colors`, `$fonts`, `$headings`, `$spacing`, `$border-radius`, `$box-shadow`, `$semantic-colors`, `$z-index`, `$opacity`, and `$forms`.
+
+### Token File Shape
+
+The token file is plain JSON. Keys use the names that the bundled SCSS expects, so keep the top-level names stable unless you also update the SCSS modules that read them.
+
+```json
+{
+  "unit": "rem",
+  "page": {},
+  "colors": [],
+  "fonts": [],
+  "headings": {},
+  "spacing": {},
+  "borderRadius": {},
+  "boxShadow": {},
+  "semanticColors": {},
+  "zIndex": {},
+  "opacity": {},
+  "forms": {}
+}
+```
+
+Top-level token groups:
+
+- `unit`: the base unit label used by the design system. The bundled file uses `rem`.
+- `page`: page-level defaults. `backgroundColor`, `margin`, and `padding` are used by the root/page styles.
+- `colors`: an array of named color entries. Each entry has a `type`, a CSS color value in `color`, and an optional `shades` array.
+- `fonts`: an array of named font entries. Each entry has a `type`, a font file `uri`, and supported `sizes`.
+- `headings`: heading font metadata. It contains a shared `type`, a font `uri`, and a `variant` array with `h1` through `h6` size values.
+- `spacing`: named spacing scale values.
+- `borderRadius`: named radius values. The generated SCSS exposes this group as `$border-radius`.
+- `boxShadow`: named CSS shadow values.
+- `semanticColors`: named intent colors for UI states such as `success`, `warning`, `danger`, and `info`.
+- `zIndex`: named stacking values for layers such as dropdowns, sticky elements, modals, and toasts.
+- `opacity`: named opacity values for disabled, muted, and overlay states.
+- `forms`: form-control tokens split into `input`, `focus`, `disabled`, and `error` groups.
+
+### Colors
+
+Color tokens are an array so the SCSS can generate utility classes from each entry:
+
+```json
+{
+  "type": "bright-green-100",
+  "color": "rgb(146, 191, 48)",
+  "shades": [20, 30]
+}
+```
+
+For every color entry, `src/resources/styles/tokens/_config.scss` generates:
+
+```text
+.bg-{type}
+.fg-{type}
+```
+
+For example, a color with `"type": "bright-green-100"` creates `.bg-bright-green-100` and `.fg-bright-green-100`.
+
+### Fonts
+
+Font tokens describe available text families and sizes:
+
+```json
+{
+  "type": "main-text-regular",
+  "uri": "'../fonts/freesans'",
+  "sizes": ["0.75rem", "0.875rem", "1rem", "1.125rem", "1.25rem"]
+}
+```
+
+The `uri` points to the generated resources font path from the compiled CSS. Keep the quotes inside the JSON string when the value should be emitted as a Sass string.
+
+### Headings
+
+Heading tokens define the heading font and the size for each heading level:
+
+```json
+{
+  "type": "heading",
+  "uri": "'../fonts/freesansbold'",
+  "variant": [
+    { "h1": "2.625rem" },
+    { "h2": "2rem" },
+    { "h3": "1.75rem" },
+    { "h4": "1.625rem" },
+    { "h5": "1.5rem" },
+    { "h6": "1.375rem" }
+  ]
+}
+```
+
+### Forms
+
+Form tokens keep the default, focus, disabled, and error styles together:
+
+```json
+{
+  "forms": {
+    "input": {
+      "height": "2.5rem",
+      "padding-x": "0.75rem",
+      "padding-y": "0.5rem",
+      "border": "1px solid #d0d0d0",
+      "border-radius": "0.5rem",
+      "background-color": "#fff",
+      "text-color": "#161616",
+      "placeholder-color": "rgba(0, 0, 0, 0.45)"
+    },
+    "focus": {
+      "border": "1px solid #0288d1",
+      "outline-color": "rgba(2, 136, 209, 0.32)",
+      "outline-width": "0.1875rem"
+    },
+    "disabled": {},
+    "error": {}
+  }
+}
+```
+
+Use the same hyphenated keys that appear in the bundled example when a CSS property name needs to be represented directly.
+
+### Example Token File
+
+A complete example token file is included at:
+
+```text
+src/resources/design/tokens.example.json
+```
+
+Use it as a reference when changing `tokens.json`, or copy it over `tokens.json` in a generated project before running the token build.
+
 ## Requirements
 
 - Node.js
@@ -76,7 +229,7 @@ The command should be run from the application root, not from inside the destina
 
 ## Storybook
 
-Import the generated stylesheet in `.storybook/preview.js`:
+Import the generated stylesheet in `.storybook/preview.[js|ts]`:
 
 ```javascript
 import "../src/resources/styles/main.css"
@@ -119,6 +272,36 @@ src/resources/styles/main.css
 ```
 
 The bundled SCSS uses Dart Sass modules with `@use` and avoids deprecated global Sass APIs.
+
+### Flex Mixins
+
+The utility module exposes flex positioning mixins for common layout alignment:
+
+```scss
+@use './src/resources/styles/utility' as utility;
+
+.toolbar {
+  @include utility.flex-center-center;
+}
+
+.actions {
+  @include utility.flex-top-right;
+}
+```
+
+Available named mixins:
+
+```text
+flex-top-left
+flex-top-center
+flex-top-right
+flex-center-left
+flex-center-center
+flex-center-right
+flex-bottom-left
+flex-bottom-center
+flex-bottom-right
+```
 
 ## With atomic-bomb
 
