@@ -16,7 +16,7 @@
     "!src/**/.sass-cache/**",
     "!src/**/*.map"
   ],
-  "homepage": "https://github.com/ReneKrewinkel/create-atomic-resources#readme",
+  "homepage": "https://atomic-bomb.io",
   "keywords": [
     "atomic design",
     "education",
@@ -41,5 +41,5 @@
     "test": "node --test _tests_/*.test.js"
   },
   "type": "module",
-  "version": "4.2.2"
+  "version": "4.2.3"
 }
