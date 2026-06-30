@@ -15,10 +15,11 @@ $types: 'light', 'dark';
   }
 
   @if math.unit($size) == 'rem' {
-    @return strip-unit($size) * 16;
+    $px: strip-unit($size) * 16;
+    @return math.round($px * 10);
   }
 
-  @return strip-unit($size);
+  @return math.round(strip-unit($size) * 10);
 }
 
 @function pxToRem($pxValue) {
