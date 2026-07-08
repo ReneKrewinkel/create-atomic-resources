@@ -30,7 +30,7 @@ Example:
 npx create-atomic-resources ./src
 ```
 
-This creates or updates:
+For web projects, this creates or updates:
 
 ```text
 src/
@@ -52,23 +52,55 @@ src/
         └── main.scss
 ```
 
+For Expo or React Native projects, the installer detects `expo` or
+`react-native` in `package.json` and creates a native-only resource tree instead:
+
+```text
+src/
+├── hooks/
+│   └── useFont/
+└── resources/
+    ├── design/
+    │   └── tokens.json
+    ├── fonts/
+    │   └── arial.ttf
+    ├── scripts/
+    │   └── tokens-to-native.mjs
+    └── styles/
+        ├── colors.ts
+        ├── fonts.ts
+        ├── index.ts
+        └── main.ts
+```
+
 ## What It Does
 
 The installer:
 
 - copies the bundled `resources` directory into the destination directory
-- installs `json-to-scss`, `sass`, and `prettier` as dev dependencies
+- installs `json-to-scss`, `sass`, and `prettier` as dev dependencies for web projects
+- installs only `prettier` as a dev dependency for Expo or React Native projects
 - detects `pnpm-lock.yaml`, `yarn.lock`, or `package-lock.json` to choose the package manager
 - defaults to `npm` when no lockfile exists
 - retries npm installs with `--legacy-peer-deps` when npm reports an `ERESOLVE` peer dependency conflict
 - adds resource scripts to the project `package.json`
 
-The generated scripts are:
+The generated web scripts are:
 
 ```json
 {
   "token": "json-to-scss ./src/resources/design/tokens.json ./src/resources/styles/tokens/_tokens.scss",
   "scss": "sass --quiet ./src/resources/styles/main.scss ./src/resources/styles/main.css",
+  "nice": "prettier -w ./src/**"
+}
+```
+
+The generated Expo or React Native scripts are:
+
+```json
+{
+  "token:native": "node ./src/resources/scripts/tokens-to-native.mjs",
+  "token-to-native": "node ./src/resources/scripts/tokens-to-native.mjs",
   "nice": "prettier -w ./src/**"
 }
 ```

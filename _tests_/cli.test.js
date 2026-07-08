@@ -7,6 +7,10 @@ import { spawnSync } from "node:child_process";
 import { convertToPascalCase } from "../src/case.js";
 import { addScriptsToPackageJson } from "../src/package-json.js";
 import {
+  createNativeStyleFiles,
+  isNativeProject,
+} from "../src/native-resources.js";
+import {
   detectPackageManager,
   getInstallCommand,
   installDependencies,
@@ -112,6 +116,72 @@ test("addScriptsToPackageJson adds resource scripts without removing existing sc
     token: "json-to-scss input output",
     scss: "sass input output",
   });
+});
+
+test("native detection checks expo and react-native dependencies", () => {
+  const dir = makeTempDir();
+  writePackageJson(dir, {
+    dependencies: {
+      expo: "^53.0.0",
+    },
+  });
+
+  try {
+    assert.equal(isNativeProject(dir), true);
+  } finally {
+    fs.rmSync(dir, { force: true, recursive: true });
+  }
+});
+
+test("native style files are generated from design tokens", () => {
+  const dir = makeTempDir();
+  const resourcesDir = path.join(dir, "resources");
+  fs.mkdirSync(path.join(resourcesDir, "design"), { recursive: true });
+  fs.writeFileSync(
+    path.join(resourcesDir, "design", "tokens.json"),
+    JSON.stringify(
+      {
+        unit: "rem",
+        colors: [{ type: "brand-primary", color: "#00f" }],
+        fonts: [{ type: "body", uri: "'../fonts/body'", sizes: ["1rem"] }],
+        page: { backgroundColor: "white" },
+        spacing: { small: 1 },
+      },
+      null,
+      2,
+    ),
+  );
+
+  try {
+    createNativeStyleFiles({ extension: "ts", resourcesDir });
+
+    assert.match(
+      fs.readFileSync(path.join(resourcesDir, "styles", "colors.ts"), "utf8"),
+      /"brand-primary": "#00f"/u,
+    );
+    assert.match(
+      fs.readFileSync(path.join(resourcesDir, "styles", "fonts.ts"), "utf8"),
+      /uri: "\.\.\/fonts\/body"/u,
+    );
+    assert.match(
+      fs.readFileSync(path.join(resourcesDir, "styles", "fonts.ts"), "utf8"),
+      /body: require\("\.\.\/fonts\/body\.ttf"\)/u,
+    );
+    assert.match(
+      fs.readFileSync(path.join(resourcesDir, "styles", "main.ts"), "utf8"),
+      /page: \{\n    backgroundColor: "white"/u,
+    );
+    assert.match(
+      fs.readFileSync(path.join(resourcesDir, "styles", "main.ts"), "utf8"),
+      /spacing: \{\n    small: 1/u,
+    );
+    assert.match(
+      fs.readFileSync(path.join(resourcesDir, "styles", "main.ts"), "utf8"),
+      /export const resources/u,
+    );
+  } finally {
+    fs.rmSync(dir, { force: true, recursive: true });
+  }
 });
 
 test("installDependencies uses the detected package manager commands", async () => {
@@ -250,6 +320,87 @@ test("cli copies resources, installs dependencies, and adds package scripts", ()
   assert.equal(packageJson.scripts.nice, "prettier -w ./src/**");
 });
 
+test("cli installs native resources without scss files or sass tooling", () => {
+  const dir = makeTempDir();
+  const binDir = path.join(dir, "bin");
+  const npmLogPath = path.join(dir, "npm-args.txt");
+
+  writePackageJson(dir, {
+    dependencies: {
+      expo: "^53.0.0",
+    },
+    devDependencies: {
+      typescript: "^5.0.0",
+    },
+  });
+  fs.writeFileSync(path.join(dir, "tsconfig.json"), "{}");
+  fs.mkdirSync(binDir);
+  writeFakeNpm(binDir, npmLogPath);
+
+  const result = spawnSync(process.execPath, [cliPath, "./src"], {
+    cwd: dir,
+    env: {
+      ...process.env,
+      PATH: `${binDir}${path.delimiter}${process.env.PATH}`,
+    },
+    encoding: "utf8",
+  });
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/styles/main.scss")),
+    false,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/styles/tokens")),
+    false,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/styles/colors.ts")),
+    true,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/styles/fonts.ts")),
+    true,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/fonts/arial.ttf")),
+    true,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/fonts/freesans.ttf")),
+    false,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/design/tokens.example.json")),
+    false,
+  );
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/hooks/useFont/useFont.ts")),
+    true,
+  );
+  assert.equal(
+    fs.readFileSync(npmLogPath, "utf8"),
+    "install --save-dev prettier\n",
+  );
+
+  const packageJson = JSON.parse(
+    fs.readFileSync(path.join(dir, "package.json"), "utf8"),
+  );
+
+  assert.equal(packageJson.scripts.token, undefined);
+  assert.equal(packageJson.scripts.scss, undefined);
+  assert.equal(
+    packageJson.scripts["token:native"],
+    "node ./src/resources/scripts/tokens-to-native.mjs",
+  );
+  assert.equal(
+    packageJson.scripts["token-to-native"],
+    "node ./src/resources/scripts/tokens-to-native.mjs",
+  );
+  assert.equal(packageJson.scripts.nice, "prettier -w ./src/**");
+});
+
 test("cli runs when invoked through an npm bin symlink", () => {
   const dir = makeTempDir();
   const binDir = path.join(dir, "bin");
@@ -300,10 +451,7 @@ test("bundled resources expose layout tokens as root custom properties", () => {
   assert.match(mainCss, /--z-index-modal: 1000;/);
   assert.match(mainCss, /--opacity-disabled: 0\.4;/);
   assert.match(mainCss, /--form-input-border: 1px solid #d0d0d0;/);
-  assert.match(
-    mainCss,
-    /--form-input-border-bottom: 1px solid #d0d0d0;/,
-  );
+  assert.match(mainCss, /--form-input-border-bottom: 1px solid #d0d0d0;/);
   assert.match(
     mainCss,
     /--box-shadow-heavy: 0px 10px 20px rgba\(0, 0, 0, 0\.4\);/,

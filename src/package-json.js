@@ -9,6 +9,12 @@ export const resourceScripts = {
   nice: "prettier -w ./src/**",
 };
 
+export const nativeResourceScripts = {
+  "token:native": "node ./src/resources/scripts/tokens-to-native.mjs",
+  "token-to-native": "node ./src/resources/scripts/tokens-to-native.mjs",
+  nice: "prettier -w ./src/**",
+};
+
 export const addScriptsToPackageJson = async (scripts, cwd = process.cwd()) => {
   const packageJsonPath = path.join(cwd, "package.json");
 
