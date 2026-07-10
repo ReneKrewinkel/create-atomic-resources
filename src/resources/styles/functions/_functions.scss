@@ -2,6 +2,7 @@
 @use "sass:color";
 @use "sass:map";
 @use "sass:math";
+@use "sass:string";
 
 $types: 'light', 'dark';
 
@@ -40,6 +41,103 @@ $types: 'light', 'dark';
   } @else {
     @return color.adjust($c, $lightness: $percentage * -1%);
   }
+}
+
+@function tokenColor($type) {
+  @each $style in config.$colors {
+    @if map.get($style, 'type') == $type {
+      @return map.get($style, 'color');
+    }
+  }
+
+  @return null;
+}
+
+@function colorReference($type, $key: 'bg') {
+  @return string.unquote('var(--#{$key}-#{$type})');
+}
+
+@function colorShadeReference($type, $shade-type: 'dark', $shade: 20, $key: 'bg') {
+  @return string.unquote('var(--#{$key}-#{$type}-#{$shade-type}-#{$shade})');
+}
+
+@function colorShadeTokenReference($type, $key: 'bg') {
+  @each $style in config.$colors {
+    $color-type: map.get($style, 'type');
+    $shades: map.get($style, 'shades');
+
+    @each $shade-type in $types {
+      @each $shade in $shades {
+        @if $type == '#{$color-type}-#{$shade-type}-#{$shade}' {
+          @return colorShadeReference($color-type, $shade-type, $shade, $key);
+        }
+      }
+    }
+  }
+
+  @return null;
+}
+
+@function colorOrReference($type, $key: 'bg') {
+  @if tokenColor($type) != null {
+    @return colorReference($type, $key);
+  }
+
+  $shade-reference: colorShadeTokenReference($type, $key);
+
+  @if $shade-reference != null {
+    @return $shade-reference;
+  }
+
+  @return $type;
+}
+
+@function hoverColorReference($hover-color, $background-color) {
+  @if $hover-color != null {
+    @return colorOrReference($hover-color);
+  }
+
+  $color: tokenColor($background-color);
+
+  @if $color != null {
+    @return shade('dark', $color, 20);
+  }
+
+  @return null;
+}
+
+@function spacingReference($type) {
+  @if $type == null {
+    @return null;
+  }
+
+  @if map.has-key(config.$spacing, $type) {
+    @return string.unquote('var(--spacing-#{$type})');
+  }
+
+  @return $type;
+}
+
+@function themeValue($tokens, $key) {
+  @if map.has-key($tokens, $key) {
+    @return map.get($tokens, $key);
+  }
+
+  @return null;
+}
+
+@function themeTokens($group, $name) {
+  @if config.$theme == null or not map.has-key(config.$theme, $group) {
+    @return ();
+  }
+
+  $theme-group: map.get(config.$theme, $group);
+
+  @if $theme-group == null or not map.has-key($theme-group, $name) {
+    @return ();
+  }
+
+  @return map.get($theme-group, $name);
 }
 
 @function rootColor($type, $key, $style) {

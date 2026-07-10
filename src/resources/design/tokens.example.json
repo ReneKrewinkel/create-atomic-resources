@@ -42,6 +42,37 @@
       "shades": [20, 30]
     }
   ],
+  "theme": {
+    "buttons": {
+      "primary": {
+        "backgroundColor": "bright-green-100",
+        "foregroundColor": "black",
+        "iconColor": "black",
+        "paddingHorizontal": "medium",
+        "paddingVertical": "small",
+        "gap": "small"
+      },
+      "secondary": {
+        "backgroundColor": "highlight-black",
+        "hoverColor": "black",
+        "foregroundColor": "white",
+        "iconColor": "white",
+        "paddingHorizontal": "medium",
+        "paddingVertical": "small"
+      },
+      "tertiary": {
+        "foregroundColor": "bright-green-100",
+        "iconColor": "bright-green-100",
+        "paddingHorizontal": "small",
+        "paddingVertical": "small"
+      }
+    },
+    "links": {},
+    "headings": {},
+    "header": {},
+    "footer": {},
+    "paragraphs": {}
+  },
   "fonts": [
     {
       "type": "main-text-regular",

@@ -481,7 +481,12 @@ test("font size tokens are stored as rem values", () => {
   });
   assert.match(mainCss, /\.main-text-regular-12/);
   assert.match(mainCss, /font-size: 0\.75rem;/);
-  assert.match(mainCss, /h1 \{\n  font-family: "heading";\n  font-size: 2rem;/);
+  assert.match(
+    mainCss,
+    new RegExp(
+      `h1 \\{\\n  font-family: "heading";\\n  font-size: ${tokens.headings.variant[0].h1.replace(".", "\\.")};`,
+    ),
+  );
 });
 
 test("utility module exposes flex position mixins", () => {
@@ -518,6 +523,45 @@ test("utility module exposes flex position mixins", () => {
   assert.match(css, /\.top-right/);
   assert.match(css, /align-items: flex-start;/);
   assert.match(css, /justify-content: flex-end;/);
+});
+
+test("utility module exposes theme token mixins and classes", () => {
+  const dir = makeTempDir();
+  const inputPath = path.join(dir, "theme.scss");
+  const outputPath = path.join(dir, "theme.css");
+
+  fs.writeFileSync(
+    inputPath,
+    [
+      `@use "${path.join(repoRoot, "src/resources/styles/utility")}" as utility;`,
+      ".button { @include utility.theme(buttons, primary); }",
+      "",
+    ].join("\n"),
+  );
+
+  const result = spawnSync(
+    "npx",
+    ["sass", "--quiet", "--no-source-map", inputPath, outputPath],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+    },
+  );
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const css = fs.readFileSync(outputPath, "utf8");
+  const mainCss = fs.readFileSync(
+    path.join(repoRoot, "src/resources/styles/main.css"),
+    "utf8",
+  );
+
+  assert.match(css, /\.button/);
+  assert.match(css, /background-color: var\(--bg-bright-green-100\);/);
+  assert.match(css, /color: var\(--fg-black\);/);
+  assert.match(css, /padding-left: var\(--spacing-medium\);/);
+  assert.match(css, /\.button:hover/);
+  assert.match(mainCss, /\.theme-buttons-primary/);
 });
 
 test("package entrypoint can be imported without running the cli", async () => {

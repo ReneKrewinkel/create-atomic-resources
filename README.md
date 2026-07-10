@@ -7,7 +7,7 @@ Creates a reusable SCSS resources setup for projects that use atomic design, Sto
 ![Rust](https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=flat-square)
 ![Neovim](https://img.shields.io/badge/Neovim-0.9%2B-57A143?logo=neovim&logoColor=white)
 
-</div>
+
 
 
 ## Usage
@@ -119,7 +119,7 @@ The `token` script converts that JSON file into:
 src/resources/styles/tokens/_tokens.scss
 ```
 
-The generated `_tokens.scss` file exports a `$tokens` map. `src/resources/styles/tokens/_config.scss` reads that map and exposes typed SCSS variables such as `$colors`, `$fonts`, `$headings`, `$spacing`, `$border-radius`, `$box-shadow`, `$semantic-colors`, `$z-index`, `$opacity`, and `$forms`.
+The generated `_tokens.scss` file exports a `$tokens` map. `src/resources/styles/tokens/_config.scss` reads that map and exposes typed SCSS variables such as `$colors`, `$fonts`, `$headings`, `$theme`, `$spacing`, `$border-radius`, `$box-shadow`, `$semantic-colors`, `$z-index`, `$opacity`, and `$forms`.
 
 ### Token File Shape
 
@@ -130,6 +130,7 @@ The token file is plain JSON. Keys use the names that the bundled SCSS expects, 
   "unit": "rem",
   "page": {},
   "colors": [],
+  "theme": {},
   "fonts": [],
   "headings": {},
   "spacing": {},
@@ -147,6 +148,7 @@ Top-level token groups:
 - `unit`: the base unit label used by the design system. The bundled file uses `rem`.
 - `page`: page-level defaults. `backgroundColor`, `margin`, and `padding` are used by the root/page styles.
 - `colors`: an array of named color entries. Each entry has a `type`, a CSS color value in `color`, and an optional `shades` array.
+- `theme`: descriptive component or content styling groups. Group keys and item keys are flexible, and all item options are optional.
 - `fonts`: an array of named font entries. Each entry has a `type`, a font file `uri`, and supported `sizes`.
 - `headings`: heading font metadata. It contains a shared `type`, a font `uri`, and a `variant` array with `h1` through `h6` size values.
 - `spacing`: named spacing scale values.
@@ -177,6 +179,54 @@ For every color entry, `src/resources/styles/tokens/_config.scss` generates:
 ```
 
 For example, a color with `"type": "bright-green-100"` creates `.bg-bright-green-100` and `.fg-bright-green-100`.
+
+### Theme
+
+Theme tokens describe reusable visual recipes that reference the color and spacing scales:
+
+```json
+{
+  "theme": {
+    "buttons": {
+      "primary": {
+        "backgroundColor": "bright-green-100",
+        "foregroundColor": "black",
+        "iconColor": "black",
+        "paddingHorizontal": "medium",
+        "paddingVertical": "small",
+        "gap": "small"
+      }
+    },
+    "links": {},
+    "headings": {}
+  }
+}
+```
+
+Theme group keys and item keys are flexible. The example above generates a `.theme-buttons-primary` class and can also be used as a mixin:
+
+```scss
+@use './src/resources/styles/utility' as utility;
+
+.button {
+  @include utility.theme(buttons, primary);
+}
+```
+
+Supported item options are optional:
+
+```text
+backgroundColor
+hoverColor
+foregroundColor
+textColor
+iconColor
+paddingHorizontal
+paddingVertical
+gap
+```
+
+Color options should use names from `colors`. `hoverColor` may also use a generated shade name such as `bright-green-100-dark-20`; when it is omitted and `backgroundColor` is known, the hover background falls back to a 20% darker color. Spacing options should use names from `spacing`.
 
 ### Fonts
 
@@ -283,6 +333,12 @@ After changing `tokens.json`, rebuild the SCSS token file:
 npm run token
 ```
 
+This runs the `json-to-scss` tooling that converts `tokens.json` into `src/resources/styles/tokens/_tokens.scss`. To run it directly:
+
+```shell
+npx json-to-scss ./src/resources/design/tokens.json ./src/resources/styles/tokens/_tokens.scss
+```
+
 Then rebuild the compiled stylesheet:
 
 ```shell
@@ -334,6 +390,34 @@ flex-bottom-left
 flex-bottom-center
 flex-bottom-right
 ```
+
+### Theme Mixins
+
+The utility module also exposes a generic theme recipe mixin backed by `theme` tokens from `tokens.json`:
+
+```scss
+@use './src/resources/styles/utility' as utility;
+
+.button {
+  @include utility.theme(buttons, primary);
+}
+```
+
+Theme classes are generated with the same group and item names:
+
+```text
+.theme-{group}-{name}
+```
+
+For example:
+
+```text
+.theme-buttons-primary
+.theme-buttons-secondary
+.theme-buttons-tertiary
+```
+
+Use the mixin when component Sass owns the selector. Use generated classes when templates can consume utility classes directly.
 
 ## With atomic-bomb
 

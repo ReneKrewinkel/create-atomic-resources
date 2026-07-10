@@ -7,6 +7,7 @@ $colors: map.get(tokens.$tokens, 'colors');
 $fonts: map.get(tokens.$tokens, 'fonts');
 $headings: map.get(tokens.$tokens, 'headings');
 $page: map.get(tokens.$tokens, 'page');
+$theme: map.get(tokens.$tokens, 'theme');
 $spacing: map.get(tokens.$tokens, 'spacing');
 $border-radius: map.get(tokens.$tokens, 'borderRadius');
 $box-shadow: map.get(tokens.$tokens, 'boxShadow');

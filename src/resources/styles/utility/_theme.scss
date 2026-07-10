@@ -1,0 +1,59 @@
+@use '../functions/functions' as functions;
+@use '../tokens/config' as config;
+
+@mixin theme($group, $name) {
+  $tokens: functions.themeTokens($group, $name);
+  $background-color: functions.themeValue($tokens, 'backgroundColor');
+  $hover-color: functions.themeValue($tokens, 'hoverColor');
+  $foreground-color: functions.themeValue($tokens, 'foregroundColor');
+  $text-color: functions.themeValue($tokens, 'textColor');
+  $icon-color: functions.themeValue($tokens, 'iconColor');
+  $padding-horizontal: functions.themeValue($tokens, 'paddingHorizontal');
+  $padding-vertical: functions.themeValue($tokens, 'paddingVertical');
+  $gap: functions.themeValue($tokens, 'gap');
+
+  @if $background-color != null {
+    background-color: functions.colorOrReference($background-color);
+  }
+
+  @if $foreground-color != null {
+    color: functions.colorOrReference($foreground-color, 'fg');
+  } @else if $text-color != null {
+    color: functions.colorOrReference($text-color, 'fg');
+  }
+
+  @if $icon-color != null {
+    --theme-icon-color: #{functions.colorOrReference($icon-color, 'fg')};
+  }
+
+  @if $padding-horizontal != null {
+    padding-left: functions.spacingReference($padding-horizontal);
+    padding-right: functions.spacingReference($padding-horizontal);
+  }
+
+  @if $padding-vertical != null {
+    padding-top: functions.spacingReference($padding-vertical);
+    padding-bottom: functions.spacingReference($padding-vertical);
+  }
+
+  @if $gap != null {
+    gap: functions.spacingReference($gap);
+  }
+
+  @if functions.hoverColorReference($hover-color, $background-color) != null {
+    &:hover {
+      background-color: functions.hoverColorReference($hover-color, $background-color);
+    }
+  }
+}
+
+/** UTILITY: Theme **/
+@if config.$theme != null {
+  @each $group, $items in config.$theme {
+    @each $name, $tokens in $items {
+      .theme-#{$group}-#{$name} {
+        @include theme($group, $name);
+      }
+    }
+  }
+}
