@@ -1,0 +1,26 @@
+@mixin form-field {
+  height: var(--form-input-height);
+  padding: var(--form-input-padding-y) var(--form-input-padding-x);
+  border: var(--form-input-border);
+  border-radius: var(--form-input-border-radius);
+  background-color: var(--form-input-background-color);
+  color: var(--form-input-text-color);
+}
+
+@mixin form-field-focus {
+  border: var(--form-focus-border);
+  outline: var(--form-focus-outline-width) solid var(--form-focus-outline-color);
+}
+
+@mixin form-field-disabled {
+  border: var(--form-disabled-border);
+  background-color: var(--form-disabled-background-color);
+  color: var(--form-disabled-text-color);
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+@mixin form-field-error {
+  border: var(--form-error-border);
+  color: var(--form-error-text-color);
+}

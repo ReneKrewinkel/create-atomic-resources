@@ -4,4 +4,12 @@
 @use 'float';
 @use 'align';
 @use 'a';
+@forward 'button';
+@forward 'focus';
+@forward 'form';
+@forward 'interaction';
+@forward 'layout';
+@forward 'media';
+@forward 'surface';
+@forward 'text';
 @forward 'theme';

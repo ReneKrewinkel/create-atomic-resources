@@ -1,0 +1,10 @@
+@mixin focus-ring {
+  outline: var(--form-focus-outline-width) solid var(--form-focus-outline-color);
+  outline-offset: 2px;
+}
+
+@mixin focus-ring-visible {
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

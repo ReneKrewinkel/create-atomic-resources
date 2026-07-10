@@ -1,0 +1,6 @@
+@use '../functions/functions' as functions;
+
+@mixin icon-size($size) {
+  inline-size: functions.spacingReference($size);
+  block-size: functions.spacingReference($size);
+}

@@ -1,0 +1,35 @@
+@mixin button {
+  display: inline-flex;
+  width: fit-content;
+  cursor: pointer;
+}
+
+@mixin button-reset {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: none;
+}
+
+@mixin button-disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@mixin button-full-width {
+  display: flex;
+  width: 100%;
+}
+
+@mixin button-icon($size: 1em) {
+  inline-size: $size;
+  block-size: $size;
+  flex: 0 0 auto;
+  color: var(--theme-icon-color, currentColor);
+}

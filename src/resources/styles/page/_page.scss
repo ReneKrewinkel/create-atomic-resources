@@ -1,9 +1,19 @@
 @use '../tokens/config' as config;
 @use 'sass:map';
 
+html {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
 body {
   margin: map.get(config.$page, 'margin');
   padding: map.get(config.$page, 'padding');
   background-color: var(--bg-#{map.get(config.$page, 'backgroundColor')});
-  font-family: 'main-text-regular';
+  font-family: 'main-text-regular', sans-serif;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
 }
