@@ -1,119 +1,113 @@
 $tokens: (
-  unit: 'rem',
+  unit: rem,
   page: (
-    backgroundColor: 'white',
+    backgroundColor: white,
     margin: 0,
     padding: 0
   ),
-  colors: (
-    (
-      type: 'black',
-      color: #161616,
-      shades: ()
+  colors: ((
+    type: black,
+    color: #161616,
+    shades: ()
+  ), (
+    type: highlight-black,
+    color: #212121,
+    shades: ()
+  ), (
+    type: white,
+    color: #FFF,
+    shades: ()
+  ), (
+    type: white-muted,
+    color: rgba(255,255,255,0.6),
+    shades: ()
+  ), (
+    type: bright-green-100,
+    color: rgb(146,191,48),
+    shades: (20, 30)
+  ), (
+    type: bright-green-60,
+    color: rgba(146,191,48, 0.6),
+    shades: (20, 30)
+  ), (
+    type: bright-green-40,
+    color: rgba(146,191,48, 0.6),
+    shades: (20, 30)
+  )),
+  theme: (
+    buttons: (
+      primary: (
+        backgroundColor: bright-green-100,
+        foregroundColor: black,
+        iconColor: black,
+        paddingHorizontal: medium,
+        paddingVertical: small,
+        gap: small
+      ),
+      secondary: (
+        backgroundColor: highlight-black,
+        hoverColor: black,
+        foregroundColor: white,
+        iconColor: white,
+        paddingHorizontal: medium,
+        paddingVertical: small
+      ),
+      tertiary: (
+        foregroundColor: bright-green-100,
+        iconColor: bright-green-100,
+        paddingHorizontal: small,
+        paddingVertical: small
+      )
     ),
-    (
-      type: 'black-muted',
-      color: rgba(0, 0, 0, 0.3),
-      shades: ()
+    links: (
+      
     ),
-    (
-      type: 'black-dim',
-      color: #f0f0f0,
-      shades: ()
+    headings: (
+      
     ),
-    (
-      type: 'white',
-      color: #fff,
-      shades: ()
+    header: (
+      
     ),
-    (
-      type: 'white-muted',
-      color: rgba(255, 255, 255, 0.6),
-      shades: ()
+    footer: (
+      
+    ),
+    paragraphs: (
+      
     )
   ),
-  fonts: (
-    (
-      type: 'main-text-regular',
-      uri: '../fonts/futult-webfont',
-      sizes: (
-        0.75rem,
-        0.875rem,
-        1rem,
-        1.125rem,
-        1.25rem
-      )
-    ),
-    (
-      type: 'main-text-medium',
-      uri: '../fonts/futura_medium_bt-webfont',
-      sizes: (
-        0.75rem,
-        0.875rem,
-        1rem,
-        1.125rem,
-        1.25rem
-      )
-    ),
-    (
-      type: 'main-text-bold',
-      uri: '../fonts/futura_heavy_font-webfont',
-      sizes: (
-        0.75rem,
-        0.875rem,
-        1rem,
-        1.125rem,
-        1.25rem
-      )
-    ),
-    (
-      type: 'main-text-link',
-      uri: '../fonts/futult-webfont',
-      sizes: (
-        0.75rem,
-        0.875rem,
-        1rem
-      )
-    ),
-    (
-      type: 'label-text',
-      uri: '../fonts/futult-webfont',
-      sizes: (
-        0.75rem,
-        0.875rem,
-        1rem,
-        1.125rem,
-        1.25rem,
-        1.375rem,
-        1.5rem,
-        1.625rem,
-        1.75rem
-      )
-    )
-  ),
+  fonts: ((
+    type: main-text-regular,
+    uri: '../fonts/freesans',
+    sizes: (0.75rem, 0.875rem, 1rem, 1.125rem, 1.25rem)
+  ), (
+    type: main-text-bold,
+    uri: '../fonts/freesansbold',
+    sizes: (0.75rem, 0.875rem, 1rem, 1.125rem, 1.25rem)
+  ), (
+    type: main-text-link,
+    uri: '../fonts/freesansbold',
+    sizes: (0.75rem, 0.875rem, 1rem)
+  ), (
+    type: label-text,
+    uri: '../fonts/freesans',
+    sizes: (0.75rem, 0.875rem, 1rem, 1.125rem, 1.25rem, 1.375rem, 1.5rem, 1.625rem, 1.75rem)
+  )),
   headings: (
-    type: 'heading',
-    uri: '../fonts/futura_medium_bt-webfont',
-    variant: (
-      (
-        h1: 2rem
-      ),
-      (
-        h2: 1.125rem
-      ),
-      (
-        h3: 1.125rem
-      ),
-      (
-        h4: 1.125rem
-      ),
-      (
-        h5: 1rem
-      ),
-      (
-        h6: 0.875rem
-      )
-    )
+    type: heading,
+    uri: '../fonts/freesansbold',
+    variant: ((
+      h1: 2.625rem
+    ), (
+      h2: 2rem
+    ), (
+      h3: 1.75rem
+    ), (
+      h4: 1.625rem
+    ), (
+      h5: 1.5rem
+    ), (
+      h6: 1.375rem
+    ))
   ),
   spacing: (
     small: 1,
@@ -126,9 +120,9 @@ $tokens: (
     large: 12
   ),
   boxShadow: (
-    light: '0px 1px 3px rgba(0, 0, 0, 0.2)',
-    medium: '0px 4px 6px rgba(0, 0, 0, 0.3)',
-    heavy: '0px 10px 20px rgba(0, 0, 0, 0.4)'
+    light: 0px 1px 3px rgba(0, 0, 0, 0.2),
+    medium: 0px 4px 6px rgba(0, 0, 0, 0.3),
+    heavy: 0px 10px 20px rgba(0, 0, 0, 0.4)
   ),
   semanticColors: (
     success: #2e7d32,

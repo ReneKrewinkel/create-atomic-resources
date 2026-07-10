@@ -1,6 +1,6 @@
 ---
 name: atomic-resources-components
-description: Use this skill when creating or updating UI components in projects that use create-atomic-resources, its generated CSS custom properties, Sass utilities, and preferably atomic-bomb component structure. It guides agents to import the generated resources stylesheet, use the design-token CSS variables instead of hard-coded visual values, use Sass flex mixins, and keep atomic-bomb barrels and component files consistent.
+description: Use this skill when creating or updating UI components in projects that use create-atomic-resources, its generated CSS custom properties, Sass utilities, and preferably atomic-bomb component structure. It guides agents to import the generated resources stylesheet, use the design-token CSS variables and theme recipes instead of hard-coded visual values, use Sass utility mixins, and keep atomic-bomb barrels and component files consistent.
 ---
 
 # Atomic Resources Components
@@ -9,9 +9,9 @@ Use this skill when building UI components in a project that has `create-atomic-
 
 ## Core Rule
 
-Use the generated resource system as the source of truth. Prefer CSS custom properties from `src/resources/styles/main.css` and Sass helpers from `src/resources/styles` over hard-coded colors, spacing, radii, shadows, z-index values, opacity values, font sizes, and form styling.
+Use the generated resource system as the source of truth. Prefer CSS custom properties from `src/resources/styles/main.css`, theme recipes from `src/resources/design/tokens.json`, and Sass helpers from `src/resources/styles` over hard-coded colors, spacing, radii, shadows, z-index values, opacity values, font sizes, and form styling.
 
-Do not invent new raw visual values unless the token file clearly lacks the needed concept. When a value is missing and the task requires a new design value, add it to `src/resources/design/tokens.json`, regenerate `src/resources/styles/tokens/_tokens.scss` if that is part of the project workflow, update Sass root generation if needed, then rebuild `main.css`.
+Do not invent new raw visual values unless the token file clearly lacks the needed concept. When a value is missing and the task requires a new design value, add it to `src/resources/design/tokens.json`, regenerate `src/resources/styles/tokens/_tokens.scss` with the project `json-to-scss` command, update Sass readers/root generation if needed, then rebuild `main.css`.
 
 ## Resource Files
 
@@ -24,6 +24,7 @@ Expected generated files:
 - `src/resources/styles/main.scss`: Sass entrypoint.
 - `src/resources/styles/main.css`: compiled CSS used by the app or Storybook.
 - `src/resources/styles/utility/_flex.scss`: flex utility classes and mixins.
+- `src/resources/styles/utility/_theme.scss`: theme recipe mixin and generated theme classes.
 
 If paths differ, inspect the project before editing. Do not assume `src` is always the app root.
 
@@ -104,6 +105,52 @@ color: var(--semantic-color-info);
 ```
 
 Use semantic colors for status, validation, alerts, and feedback. Use base foreground/background colors for neutral surfaces and text.
+
+### Theme Recipes
+
+Theme tokens live under `theme` in `src/resources/design/tokens.json`. The top-level group keys and item keys are flexible:
+
+```json
+{
+  "theme": {
+    "buttons": {
+      "primary": {
+        "backgroundColor": "bright-green-100",
+        "foregroundColor": "black",
+        "iconColor": "black",
+        "paddingHorizontal": "medium",
+        "paddingVertical": "small",
+        "gap": "small"
+      }
+    },
+    "links": {},
+    "headings": {}
+  }
+}
+```
+
+All item options are optional. Supported options:
+
+```text
+backgroundColor
+hoverColor
+foregroundColor
+textColor
+iconColor
+paddingHorizontal
+paddingVertical
+gap
+```
+
+Color options should reference names from `colors`. `hoverColor` can reference a color token or a generated shade token such as `bright-green-100-dark-20`; when omitted and `backgroundColor` is known, the theme utility falls back to a 20% darker hover background. Spacing options should reference names from `spacing`.
+
+Generated CSS classes follow this pattern:
+
+```css
+.theme-{group}-{name}
+```
+
+For example, `theme.buttons.primary` generates `.theme-buttons-primary`.
 
 ### Typography
 
@@ -280,6 +327,18 @@ align-items: center;
 justify-content: center;
 ```
 
+Theme recipes can be applied through the generic theme mixin:
+
+```scss
+@use '../../resources/styles/utility' as utility;
+
+.button {
+  @include utility.theme(buttons, primary);
+}
+```
+
+Use the mixin when a component owns its selector. Use generated `.theme-{group}-{name}` classes when markup can consume utility classes directly.
+
 ## Component Styling Pattern
 
 For an atomic-bomb generated component, prefer colocated Sass if the template provides it:
@@ -299,13 +358,10 @@ Example Sass:
 
 .button {
   @include utility.flex-center-center;
-  gap: var(--spacing-small);
+  @include utility.theme(buttons, primary);
   min-height: var(--form-input-height);
-  padding: var(--form-input-padding-y) var(--form-input-padding-x);
   border: var(--form-input-border);
   border-radius: var(--border-radius-medium);
-  background: var(--semantic-color-info);
-  color: var(--bg-white);
   box-shadow: var(--box-shadow-light);
   font-family: var(--main-text-bold), sans-serif;
 }
@@ -322,10 +378,27 @@ Adjust relative `@use` paths based on the actual component depth. Verify path co
 When adding or changing design-token values:
 
 1. Edit `src/resources/design/tokens.json`.
-2. Update `src/resources/styles/tokens/_tokens.scss` when the project keeps this generated file checked in.
-3. Expose new token groups in `src/resources/styles/tokens/_config.scss`.
-4. Emit root variables in `src/resources/styles/root/_root.scss`.
+2. Regenerate `src/resources/styles/tokens/_tokens.scss` with the project token command:
+
+```shell
+npm run token
+```
+
+If package scripts are not available, run the same `json-to-scss` command directly:
+
+```shell
+npx json-to-scss ./src/resources/design/tokens.json ./src/resources/styles/tokens/_tokens.scss
+```
+
+3. Expose new token groups in `src/resources/styles/tokens/_config.scss` when adding a new top-level group.
+4. Emit root variables in `src/resources/styles/root/_root.scss` when the token should become a CSS custom property.
 5. Rebuild CSS:
+
+```shell
+npm run scss
+```
+
+If package scripts are not available, run Sass directly:
 
 ```shell
 npx sass --quiet --no-source-map src/resources/styles/main.scss src/resources/styles/main.css
@@ -349,9 +422,10 @@ Before finishing component work:
 
 - `main.css` is imported once globally.
 - Component styles use token variables instead of raw colors, spacing, radii, shadows, opacity, z-index, and form values.
+- Theme recipes are used for repeated component variants such as buttons, links, headings, headers, footers, and paragraphs.
 - New visual primitives are added to tokens rather than hard-coded locally.
 - Sass `@use` paths resolve.
 - atomic-bomb component and Sass barrels are intact.
+- `npm run token` or `npx json-to-scss ./src/resources/design/tokens.json ./src/resources/styles/tokens/_tokens.scss` has been run when `tokens.json` changed.
 - `npx sass --quiet --no-source-map src/resources/styles/main.scss src/resources/styles/main.css` succeeds when Sass files changed.
 - `npm test` passes when tests exist.
-
