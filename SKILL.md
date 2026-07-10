@@ -327,12 +327,57 @@ align-items: center;
 justify-content: center;
 ```
 
+Use the base button mixin for clickable `div`-based controls that should size to their text:
+
+```scss
+@use '../../resources/styles/utility' as utility;
+
+.button {
+  @include utility.button;
+}
+```
+
+The button mixin only emits:
+
+```css
+display: inline-flex;
+width: fit-content;
+cursor: pointer;
+```
+
+Add padding, gaps, colors, borders, radius, and theme treatment separately.
+
+Available component helper mixins:
+
+```scss
+@include utility.button-reset;
+@include utility.button-disabled;
+@include utility.button-full-width;
+@include utility.button-icon(1.25rem);
+@include utility.focus-ring;
+@include utility.focus-ring-visible;
+@include utility.interactive-transition;
+@include utility.stack(small);
+@include utility.cluster(medium);
+@include utility.icon-size(small);
+@include utility.surface;
+@include utility.truncate;
+@include utility.visually-hidden;
+@include utility.form-field;
+@include utility.form-field-focus;
+@include utility.form-field-disabled;
+@include utility.form-field-error;
+```
+
+Use `button-reset` for native `<button>` elements, `button-disabled` for disabled clickable controls, `focus-ring-visible` for keyboard focus, `stack` for vertical component layout, `cluster` for wrapping action rows, `truncate` for one-line overflow text, and form-field helpers for input/select/textarea states.
+
 Theme recipes can be applied through the generic theme mixin:
 
 ```scss
 @use '../../resources/styles/utility' as utility;
 
 .button {
+  @include utility.button;
   @include utility.theme(buttons, primary);
 }
 ```
@@ -357,6 +402,7 @@ Example Sass:
 @use '../../../resources/styles/utility' as utility;
 
 .button {
+  @include utility.button;
   @include utility.flex-center-center;
   @include utility.theme(buttons, primary);
   min-height: var(--form-input-height);

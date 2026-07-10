@@ -525,6 +525,117 @@ test("utility module exposes flex position mixins", () => {
   assert.match(css, /justify-content: flex-end;/);
 });
 
+test("utility module exposes button base mixin", () => {
+  const dir = makeTempDir();
+  const inputPath = path.join(dir, "button.scss");
+  const outputPath = path.join(dir, "button.css");
+
+  fs.writeFileSync(
+    inputPath,
+    [
+      `@use "${path.join(repoRoot, "src/resources/styles/utility")}" as utility;`,
+      ".button { @include utility.button; }",
+      "",
+    ].join("\n"),
+  );
+
+  const result = spawnSync(
+    "npx",
+    ["sass", "--quiet", "--no-source-map", inputPath, outputPath],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+    },
+  );
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const css = fs.readFileSync(outputPath, "utf8");
+
+  assert.match(css, /\.button/);
+  assert.match(css, /display: inline-flex;/);
+  assert.match(css, /width: fit-content;/);
+  assert.match(css, /cursor: pointer;/);
+});
+
+test("utility module exposes component helper mixins", () => {
+  const dir = makeTempDir();
+  const inputPath = path.join(dir, "helpers.scss");
+  const outputPath = path.join(dir, "helpers.css");
+
+  fs.writeFileSync(
+    inputPath,
+    [
+      `@use "${path.join(repoRoot, "src/resources/styles/utility")}" as utility;`,
+      ".reset { @include utility.button-reset; }",
+      ".disabled { @include utility.button-disabled; }",
+      ".wide { @include utility.button-full-width; }",
+      ".button-icon { @include utility.button-icon(1.25rem); }",
+      ".focus { @include utility.focus-ring; }",
+      ".transition { @include utility.interactive-transition; }",
+      ".stack { @include utility.stack(small); }",
+      ".cluster { @include utility.cluster(medium); }",
+      ".icon { @include utility.icon-size(small); }",
+      ".surface { @include utility.surface; }",
+      ".truncate { @include utility.truncate; }",
+      ".hidden { @include utility.visually-hidden; }",
+      ".field { @include utility.form-field; }",
+      ".field-focus { @include utility.form-field-focus; }",
+      ".field-disabled { @include utility.form-field-disabled; }",
+      ".field-error { @include utility.form-field-error; }",
+      "",
+    ].join("\n"),
+  );
+
+  const result = spawnSync(
+    "npx",
+    ["sass", "--quiet", "--no-source-map", inputPath, outputPath],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+    },
+  );
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const css = fs.readFileSync(outputPath, "utf8");
+
+  assert.match(css, /\.reset/);
+  assert.match(css, /appearance: none;/);
+  assert.match(css, /\.disabled/);
+  assert.match(css, /pointer-events: none;/);
+  assert.match(css, /\.wide/);
+  assert.match(css, /width: 100%;/);
+  assert.match(css, /\.button-icon/);
+  assert.match(css, /color: var\(--theme-icon-color, currentColor\);/);
+  assert.match(css, /\.focus/);
+  assert.match(css, /outline: var\(--form-focus-outline-width\) solid var\(--form-focus-outline-color\);/);
+  assert.match(css, /\.transition/);
+  assert.match(css, /transition: var\(--transition\);/);
+  assert.match(css, /\.stack/);
+  assert.match(css, /flex-direction: column;/);
+  assert.match(css, /gap: var\(--spacing-small\);/);
+  assert.match(css, /\.cluster/);
+  assert.match(css, /flex-wrap: wrap;/);
+  assert.match(css, /gap: var\(--spacing-medium\);/);
+  assert.match(css, /\.icon/);
+  assert.match(css, /inline-size: var\(--spacing-small\);/);
+  assert.match(css, /\.surface/);
+  assert.match(css, /box-shadow: var\(--box-shadow-light\);/);
+  assert.match(css, /\.truncate/);
+  assert.match(css, /text-overflow: ellipsis;/);
+  assert.match(css, /\.hidden/);
+  assert.match(css, /clip: rect\(0, 0, 0, 0\);/);
+  assert.match(css, /\.field/);
+  assert.match(css, /height: var\(--form-input-height\);/);
+  assert.match(css, /\.field-focus/);
+  assert.match(css, /border: var\(--form-focus-border\);/);
+  assert.match(css, /\.field-disabled/);
+  assert.match(css, /background-color: var\(--form-disabled-background-color\);/);
+  assert.match(css, /\.field-error/);
+  assert.match(css, /color: var\(--form-error-text-color\);/);
+});
+
 test("utility module exposes theme token mixins and classes", () => {
   const dir = makeTempDir();
   const inputPath = path.join(dir, "theme.scss");

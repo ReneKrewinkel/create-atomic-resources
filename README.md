@@ -391,6 +391,124 @@ flex-bottom-center
 flex-bottom-right
 ```
 
+### Button Mixins
+
+The utility module exposes a base button mixin for clickable `div`-based controls that should size to their text. It only sets layout and pointer behavior; add padding, gap, color, radius, and other visual treatment separately.
+
+```scss
+@use './src/resources/styles/utility' as utility;
+
+.button {
+  @include utility.button;
+  @include utility.theme(buttons, primary);
+}
+```
+
+Output from the base button mixin:
+
+```css
+display: inline-flex;
+width: fit-content;
+cursor: pointer;
+```
+
+Additional button helpers:
+
+```scss
+.nativeButton {
+  @include utility.button-reset;
+}
+
+.disabledButton {
+  @include utility.button-disabled;
+}
+
+.fullWidthButton {
+  @include utility.button-full-width;
+}
+
+.buttonIcon {
+  @include utility.button-icon(1.25rem);
+}
+```
+
+### Interaction And Focus Mixins
+
+Use shared interaction helpers for consistent transitions and keyboard focus states:
+
+```scss
+.control {
+  @include utility.interactive-transition;
+  @include utility.focus-ring-visible;
+}
+
+.control:focus {
+  @include utility.focus-ring;
+}
+```
+
+### Layout Mixins
+
+Use stack and cluster helpers for common component layout:
+
+```scss
+.stack {
+  @include utility.stack(small);
+}
+
+.actions {
+  @include utility.cluster(medium);
+}
+```
+
+Spacing arguments may be spacing token names such as `small`, `medium`, and `large`, or direct CSS lengths.
+
+### Text And Media Mixins
+
+```scss
+.label {
+  @include utility.truncate;
+}
+
+.screenReaderOnly {
+  @include utility.visually-hidden;
+}
+
+.icon {
+  @include utility.icon-size(small);
+}
+```
+
+### Surface Mixins
+
+```scss
+.panel {
+  @include utility.surface;
+}
+```
+
+### Form Mixins
+
+Form helpers use the generated `--form-*` variables:
+
+```scss
+.field {
+  @include utility.form-field;
+}
+
+.field:focus {
+  @include utility.form-field-focus;
+}
+
+.field:disabled {
+  @include utility.form-field-disabled;
+}
+
+.field[aria-invalid='true'] {
+  @include utility.form-field-error;
+}
+```
+
 ### Theme Mixins
 
 The utility module also exposes a generic theme recipe mixin backed by `theme` tokens from `tokens.json`:

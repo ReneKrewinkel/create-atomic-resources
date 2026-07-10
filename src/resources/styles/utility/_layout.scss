@@ -1,0 +1,20 @@
+@use '../functions/functions' as functions;
+
+@mixin stack($gap: null) {
+  display: flex;
+  flex-direction: column;
+
+  @if $gap != null {
+    gap: functions.spacingReference($gap);
+  }
+}
+
+@mixin cluster($gap: null) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  @if $gap != null {
+    gap: functions.spacingReference($gap);
+  }
+}

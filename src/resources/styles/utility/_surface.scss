@@ -1,0 +1,5 @@
+@mixin surface {
+  background-color: var(--bg-white);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--box-shadow-light);
+}

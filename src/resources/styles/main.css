@@ -273,11 +273,21 @@ a {
   --transition: all 0.4s ease;
 }
 
+html {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
 body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-white);
-  font-family: "main-text-regular";
+  font-family: "main-text-regular", sans-serif;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
 }
 
 /** UTILITY: Colors **/
