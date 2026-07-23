@@ -252,7 +252,7 @@ test("installDependencies retries npm peer conflicts with legacy peer deps", asy
   fs.writeFileSync(path.join(dir, "package-lock.json"), "{}");
 
   await silenceConsole(() =>
-    installDependencies(["json-to-scss", "sass", "prettier"], {
+    installDependencies(["json-to-scss", "sass@1.93.2", "prettier"], {
       cwd: dir,
       dev: true,
       execCommand: async (cmd) => {
@@ -268,8 +268,8 @@ test("installDependencies retries npm peer conflicts with legacy peer deps", asy
   );
 
   assert.deepEqual(commands, [
-    "npm install --save-dev json-to-scss sass prettier",
-    "npm install --save-dev --legacy-peer-deps json-to-scss sass prettier",
+    "npm install --save-dev json-to-scss sass@1.93.2 prettier",
+    "npm install --save-dev --legacy-peer-deps json-to-scss sass@1.93.2 prettier",
   ]);
 });
 
@@ -302,7 +302,7 @@ test("cli copies resources, installs dependencies, and adds package scripts", ()
   );
   assert.equal(
     fs.readFileSync(npmLogPath, "utf8"),
-    "install --save-dev json-to-scss sass prettier\n",
+    "install --save-dev json-to-scss sass@1.93.2 prettier\n",
   );
 
   const packageJson = JSON.parse(
@@ -428,7 +428,7 @@ test("cli runs when invoked through an npm bin symlink", () => {
   );
   assert.equal(
     fs.readFileSync(npmLogPath, "utf8"),
-    "install --save-dev json-to-scss sass prettier\n",
+    "install --save-dev json-to-scss sass@1.93.2 prettier\n",
   );
 });
 
@@ -446,6 +446,8 @@ test("bundled resources expose layout tokens as root custom properties", () => {
   assert.match(rootScss, /--border-radius-#\{\$type\}/);
   assert.match(rootScss, /--box-shadow-#\{\$type\}/);
   assert.match(mainCss, /--spacing-small: 1rem;/);
+  assert.match(mainCss, /--font-size-small: 0\.875rem;/);
+  assert.match(mainCss, /--font-size-body: var\(--font-size-medium\);/);
   assert.match(mainCss, /--border-radius-medium: 0\.5rem;/);
   assert.match(mainCss, /--semantic-color-danger: #d32f2f;/);
   assert.match(mainCss, /--z-index-modal: 1000;/);
@@ -671,7 +673,13 @@ test("utility module exposes theme token mixins and classes", () => {
   assert.match(css, /background-color: var\(--bg-bright-green-100\);/);
   assert.match(css, /color: var\(--fg-black\);/);
   assert.match(css, /padding-left: var\(--spacing-medium\);/);
-  assert.match(css, /\.button:hover/);
+  assert.match(css, /font-family: var\(--label-text\);/);
+  assert.match(css, /font-size: var\(--font-size-label\);/);
+  assert.match(css, /width: fit-content;/);
+  assert.match(
+    css,
+    /\.button:hover \{\n  background-color: var\(--bg-bright-green-100-dark-20\);/u,
+  );
   assert.match(mainCss, /\.theme-buttons-primary/);
 });
 

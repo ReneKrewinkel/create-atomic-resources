@@ -11,6 +11,9 @@
   $padding-horizontal: functions.themeValue($tokens, 'paddingHorizontal');
   $padding-vertical: functions.themeValue($tokens, 'paddingVertical');
   $gap: functions.themeValue($tokens, 'gap');
+  $font-name: functions.themeValue($tokens, 'fontName');
+  $font-size: functions.themeValue($tokens, 'fontSize');
+  $width: functions.themeValue($tokens, 'width');
 
   @if $background-color != null {
     background-color: functions.colorOrReference($background-color);
@@ -38,6 +41,18 @@
 
   @if $gap != null {
     gap: functions.spacingReference($gap);
+  }
+
+  @if $font-name != null {
+    font-family: functions.fontNameReference($font-name);
+  }
+
+  @if $font-size != null {
+    font-size: functions.fontSizeReference($font-size);
+  }
+
+  @if $width != null {
+    width: $width;
   }
 
   @if functions.hoverColorReference($hover-color, $background-color) != null {

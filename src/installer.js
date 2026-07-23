@@ -10,6 +10,8 @@ import {
 import { success } from "./logger.js";
 import { installNativeResources, isNativeProject } from "./native-resources.js";
 
+const webResourceDependencies = ["json-to-scss", "sass@1.93.2", "prettier"];
+
 export const installResources = async ({
   destination,
   cwd = process.cwd(),
@@ -39,7 +41,7 @@ export const installResources = async ({
   );
 
   await installDependencies(
-    nativeProject ? ["prettier"] : ["json-to-scss", "sass", "prettier"],
+    nativeProject ? ["prettier"] : webResourceDependencies,
     {
       dev: true,
       cwd,

@@ -120,7 +120,10 @@ Theme tokens live under `theme` in `src/resources/design/tokens.json`. The top-l
         "iconColor": "black",
         "paddingHorizontal": "medium",
         "paddingVertical": "small",
-        "gap": "small"
+        "gap": "small",
+        "fontName": "label-text",
+        "fontSize": "label",
+        "width": "fit-content"
       }
     },
     "links": {},
@@ -140,9 +143,12 @@ iconColor
 paddingHorizontal
 paddingVertical
 gap
+fontName
+fontSize
+width
 ```
 
-Color options should reference names from `colors`. `hoverColor` can reference a color token or a generated shade token such as `bright-green-100-dark-20`; when omitted and `backgroundColor` is known, the theme utility falls back to a 20% darker hover background. Spacing options should reference names from `spacing`.
+Color options should reference names from `colors`. `hoverColor` can reference a color token or a generated shade token such as `bright-green-100-dark-20`; when omitted and `backgroundColor` has a configured `20` shade, the theme utility uses that shade's CSS variable. Otherwise it falls back to a computed 20% darker hover background. Spacing options should reference names from `spacing`. `fontName` accepts a name from `fonts`, or a direct CSS font-family value. `fontSize` accepts a generic or semantic name from `fontSizes`, or a direct CSS font-size value.
 
 Generated CSS classes follow this pattern:
 
@@ -164,6 +170,19 @@ font-family: var(--label-text), sans-serif;
 ```
 
 Font-size tokens in this resource system are stored as `rem` values. Existing generated utility classes may keep pixel-like suffixes for compatibility, such as `.main-text-regular-12`, while emitting `font-size: 0.75rem`.
+
+Generic and semantic font-size tokens live under `fontSizes`:
+
+```json
+{
+  "fontSizes": {
+    "generic": { "small": "0.875rem", "medium": "1rem", "large": "1.25rem" },
+    "semantic": { "caption": "small", "label": "small", "body": "medium", "title": "large" }
+  }
+}
+```
+
+They generate custom properties such as `--font-size-small` and `--font-size-body`. Semantic values reference the generic scale.
 
 Avoid hard-coded font sizes in new component CSS. Prefer existing heading styles, utility classes, or add/consume a token.
 
@@ -377,8 +396,8 @@ Theme recipes can be applied through the generic theme mixin:
 @use '../../resources/styles/utility' as utility;
 
 .button {
-  @include utility.button;
   @include utility.theme(buttons, primary);
+  @include utility.button;
 }
 ```
 
@@ -402,9 +421,9 @@ Example Sass:
 @use '../../../resources/styles/utility' as utility;
 
 .button {
-  @include utility.button;
   @include utility.flex-center-center;
   @include utility.theme(buttons, primary);
+  @include utility.button;
   min-height: var(--form-input-height);
   border: var(--form-input-border);
   border-radius: var(--border-radius-medium);
