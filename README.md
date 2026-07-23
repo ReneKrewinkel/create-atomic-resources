@@ -30,6 +30,16 @@ Example:
 npx create-atomic-resources ./src
 ```
 
+### Updating Existing Resources
+
+Run the latest release against the same destination to update the bundled resource files:
+
+```shell
+npx create-atomic-resources@latest ./src
+```
+
+If `src/resources/design/tokens.json` already exists, the installer asks before replacing it. Press Enter or answer `n` to keep the existing project tokens; the default is no. Answer `y` or `yes` to replace it with the latest bundled token file. Other resource files are updated either way.
+
 For web projects, this creates or updates:
 
 ```text
@@ -83,6 +93,7 @@ The installer:
 - detects `pnpm-lock.yaml`, `yarn.lock`, or `package-lock.json` to choose the package manager
 - defaults to `npm` when no lockfile exists
 - retries npm installs with `--legacy-peer-deps` when npm reports an `ERESOLVE` peer dependency conflict
+- preserves an existing destination `tokens.json` unless replacement is explicitly confirmed
 - adds resource scripts to the project `package.json`
 
 The generated web scripts are:
@@ -199,6 +210,8 @@ Theme tokens describe reusable visual recipes that reference the color and spaci
         "gap": "small",
         "fontName": "label-text",
         "fontSize": "label",
+        "borderRadius": "medium",
+        "cursor": "pointer",
         "width": "fit-content"
       }
     },
@@ -231,10 +244,12 @@ paddingVertical
 gap
 fontName
 fontSize
+borderRadius
+cursor
 width
 ```
 
-Color options should use names from `colors`. `hoverColor` may also use a generated shade name such as `bright-green-100-dark-20`; when it is omitted and `backgroundColor` has a configured `20` shade, the hover background uses that shade's CSS variable. Otherwise it falls back to a computed 20% darker color. Spacing options should use names from `spacing`. `fontName` accepts a name from `fonts`, or a direct CSS font-family value. `fontSize` accepts generic or semantic names from `fontSizes`, or a direct CSS font-size value.
+Color options should use names from `colors`. `hoverColor` may also use a generated shade name such as `bright-green-100-dark-20`; when it is omitted and `backgroundColor` has a configured `20` shade, the hover background uses that shade's CSS variable. Otherwise it falls back to a computed 20% darker color. Spacing options should use names from `spacing`. `fontName` accepts a name from `fonts`, or a direct CSS font-family value. `fontSize` accepts generic or semantic names from `fontSizes`, or a direct CSS font-size value. `borderRadius` accepts a name from `borderRadius`, or a direct CSS radius. `cursor` accepts any CSS cursor value.
 
 ### Font Sizes
 

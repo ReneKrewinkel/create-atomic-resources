@@ -653,6 +653,8 @@ p a {
   gap: var(--spacing-small);
   font-family: var(--label-text);
   font-size: var(--font-size-label);
+  border-radius: var(--border-radius-medium);
+  cursor: pointer;
   width: fit-content;
 }
 .theme-buttons-primary:hover {
@@ -669,6 +671,8 @@ p a {
   padding-bottom: var(--spacing-small);
   font-family: var(--label-text);
   font-size: var(--font-size-label);
+  border-radius: var(--border-radius-medium);
+  cursor: pointer;
   width: fit-content;
 }
 .theme-buttons-secondary:hover {
@@ -684,6 +688,8 @@ p a {
   padding-bottom: var(--spacing-small);
   font-family: var(--label-text);
   font-size: var(--font-size-label);
+  border-radius: var(--border-radius-medium);
+  cursor: pointer;
   width: fit-content;
 }
 

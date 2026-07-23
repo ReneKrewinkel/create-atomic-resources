@@ -124,6 +124,18 @@ $types: 'light', 'dark';
   @return $type;
 }
 
+@function borderRadiusReference($type) {
+  @if $type == null {
+    @return null;
+  }
+
+  @if map.has-key(config.$border-radius, $type) {
+    @return string.unquote('var(--border-radius-#{$type})');
+  }
+
+  @return $type;
+}
+
 @function fontSizeReference($type) {
   @if $type == null {
     @return null;

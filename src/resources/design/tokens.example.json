@@ -53,6 +53,8 @@
         "gap": "small",
         "fontName": "label-text",
         "fontSize": "label",
+        "borderRadius": "medium",
+        "cursor": "pointer",
         "width": "fit-content"
       },
       "secondary": {
@@ -64,6 +66,8 @@
         "paddingVertical": "small",
         "fontName": "label-text",
         "fontSize": "label",
+        "borderRadius": "medium",
+        "cursor": "pointer",
         "width": "fit-content"
       },
       "tertiary": {
@@ -73,6 +77,8 @@
         "paddingVertical": "small",
         "fontName": "label-text",
         "fontSize": "label",
+        "borderRadius": "medium",
+        "cursor": "pointer",
         "width": "fit-content"
       }
     },

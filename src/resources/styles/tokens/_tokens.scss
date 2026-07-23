@@ -45,6 +45,8 @@ $tokens: (
         gap: small,
         fontName: label-text,
         fontSize: label,
+        borderRadius: medium,
+        cursor: pointer,
         width: fit-content
       ),
       secondary: (
@@ -56,6 +58,8 @@ $tokens: (
         paddingVertical: small,
         fontName: label-text,
         fontSize: label,
+        borderRadius: medium,
+        cursor: pointer,
         width: fit-content
       ),
       tertiary: (
@@ -65,6 +69,8 @@ $tokens: (
         paddingVertical: small,
         fontName: label-text,
         fontSize: label,
+        borderRadius: medium,
+        cursor: pointer,
         width: fit-content
       )
     ),

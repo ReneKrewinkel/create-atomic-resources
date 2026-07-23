@@ -320,6 +320,71 @@ test("cli copies resources, installs dependencies, and adds package scripts", ()
   assert.equal(packageJson.scripts.nice, "prettier -w ./src/**");
 });
 
+test("cli preserves an existing tokens file when overwrite is not confirmed", () => {
+  const dir = makeTempDir();
+  const binDir = path.join(dir, "bin");
+  const npmLogPath = path.join(dir, "npm-args.txt");
+  const tokenPath = path.join(dir, "src/resources/design/tokens.json");
+  const existingTokens = '{"project":"custom"}\n';
+
+  writePackageJson(dir);
+  fs.mkdirSync(path.dirname(tokenPath), { recursive: true });
+  fs.writeFileSync(tokenPath, existingTokens);
+  fs.mkdirSync(binDir);
+  writeFakeNpm(binDir, npmLogPath);
+
+  const result = spawnSync(process.execPath, [cliPath, "./src"], {
+    cwd: dir,
+    env: {
+      ...process.env,
+      PATH: `${binDir}${path.delimiter}${process.env.PATH}`,
+    },
+    input: "\n",
+    encoding: "utf8",
+  });
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /tokens\.json already exists/u);
+  assert.equal(fs.readFileSync(tokenPath, "utf8"), existingTokens);
+  assert.equal(
+    fs.existsSync(path.join(dir, "src/resources/styles/main.scss")),
+    true,
+  );
+});
+
+test("cli overwrites an existing tokens file when overwrite is confirmed", () => {
+  const dir = makeTempDir();
+  const binDir = path.join(dir, "bin");
+  const npmLogPath = path.join(dir, "npm-args.txt");
+  const tokenPath = path.join(dir, "src/resources/design/tokens.json");
+
+  writePackageJson(dir);
+  fs.mkdirSync(path.dirname(tokenPath), { recursive: true });
+  fs.writeFileSync(tokenPath, '{"project":"custom"}\n');
+  fs.mkdirSync(binDir);
+  writeFakeNpm(binDir, npmLogPath);
+
+  const result = spawnSync(process.execPath, [cliPath, "./src"], {
+    cwd: dir,
+    env: {
+      ...process.env,
+      PATH: `${binDir}${path.delimiter}${process.env.PATH}`,
+    },
+    input: "y\n",
+    encoding: "utf8",
+  });
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /tokens\.json already exists/u);
+  assert.equal(
+    fs.readFileSync(tokenPath, "utf8"),
+    fs.readFileSync(
+      path.join(repoRoot, "src/resources/design/tokens.json"),
+      "utf8",
+    ),
+  );
+});
+
 test("cli installs native resources without scss files or sass tooling", () => {
   const dir = makeTempDir();
   const binDir = path.join(dir, "bin");
@@ -675,6 +740,8 @@ test("utility module exposes theme token mixins and classes", () => {
   assert.match(css, /padding-left: var\(--spacing-medium\);/);
   assert.match(css, /font-family: var\(--label-text\);/);
   assert.match(css, /font-size: var\(--font-size-label\);/);
+  assert.match(css, /border-radius: var\(--border-radius-medium\);/);
+  assert.match(css, /cursor: pointer;/);
   assert.match(css, /width: fit-content;/);
   assert.match(
     css,

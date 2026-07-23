@@ -123,6 +123,8 @@ Theme tokens live under `theme` in `src/resources/design/tokens.json`. The top-l
         "gap": "small",
         "fontName": "label-text",
         "fontSize": "label",
+        "borderRadius": "medium",
+        "cursor": "pointer",
         "width": "fit-content"
       }
     },
@@ -145,10 +147,12 @@ paddingVertical
 gap
 fontName
 fontSize
+borderRadius
+cursor
 width
 ```
 
-Color options should reference names from `colors`. `hoverColor` can reference a color token or a generated shade token such as `bright-green-100-dark-20`; when omitted and `backgroundColor` has a configured `20` shade, the theme utility uses that shade's CSS variable. Otherwise it falls back to a computed 20% darker hover background. Spacing options should reference names from `spacing`. `fontName` accepts a name from `fonts`, or a direct CSS font-family value. `fontSize` accepts a generic or semantic name from `fontSizes`, or a direct CSS font-size value.
+Color options should reference names from `colors`. `hoverColor` can reference a color token or a generated shade token such as `bright-green-100-dark-20`; when omitted and `backgroundColor` has a configured `20` shade, the theme utility uses that shade's CSS variable. Otherwise it falls back to a computed 20% darker hover background. Spacing options should reference names from `spacing`. `fontName` accepts a name from `fonts`, or a direct CSS font-family value. `fontSize` accepts a generic or semantic name from `fontSizes`, or a direct CSS font-size value. `borderRadius` accepts a name from `borderRadius`, or a direct CSS radius. `cursor` accepts any CSS cursor value.
 
 Generated CSS classes follow this pattern:
 

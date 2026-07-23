@@ -1,6 +1,7 @@
 import { readAppConfig } from "./config.js";
 import { installResources } from "./installer.js";
 import { fatal, showCopyright, showUsage } from "./logger.js";
+import { confirmTokenOverwrite } from "./prompt.js";
 
 export const runCli = async ({ args = process.argv.slice(2) } = {}) => {
   const appConfig = readAppConfig();
@@ -14,6 +15,7 @@ export const runCli = async ({ args = process.argv.slice(2) } = {}) => {
     await installResources({
       destination: args[0],
       cwd: process.cwd(),
+      confirmOverwrite: confirmTokenOverwrite,
     });
   } catch (err) {
     fatal(err.stderr || err.message);
