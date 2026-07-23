@@ -13,6 +13,8 @@
   $gap: functions.themeValue($tokens, 'gap');
   $font-name: functions.themeValue($tokens, 'fontName');
   $font-size: functions.themeValue($tokens, 'fontSize');
+  $border-radius: functions.themeValue($tokens, 'borderRadius');
+  $cursor: functions.themeValue($tokens, 'cursor');
   $width: functions.themeValue($tokens, 'width');
 
   @if $background-color != null {
@@ -49,6 +51,14 @@
 
   @if $font-size != null {
     font-size: functions.fontSizeReference($font-size);
+  }
+
+  @if $border-radius != null {
+    border-radius: functions.borderRadiusReference($border-radius);
+  }
+
+  @if $cursor != null {
+    cursor: $cursor;
   }
 
   @if $width != null {

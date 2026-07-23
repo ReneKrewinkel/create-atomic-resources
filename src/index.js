@@ -15,4 +15,5 @@ export {
   getInstallCommand,
   installDependencies,
 } from "./package-manager.js";
+export { confirmTokenOverwrite } from "./prompt.js";
 export { runCli } from "./cli.js";
