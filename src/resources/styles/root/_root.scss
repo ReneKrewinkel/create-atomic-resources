@@ -28,6 +28,16 @@
     --spacing-#{$type}: #{$value}#{config.$unit};
   }
 
+  /** GENERIC FONT SIZES **/
+  @each $type, $value in config.$font-sizes-generic {
+    --font-size-#{$type}: #{$value};
+  }
+
+  /** SEMANTIC FONT SIZES **/
+  @each $type, $value in config.$font-sizes-semantic {
+    --font-size-#{$type}: #{functions.fontSizeReference($value)};
+  }
+
   /** BORDER RADIUS **/
   @each $type, $value in config.$border-radius {
     --border-radius-#{$type}: #{functions.pxToRem($value)};

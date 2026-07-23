@@ -119,7 +119,7 @@ The `token` script converts that JSON file into:
 src/resources/styles/tokens/_tokens.scss
 ```
 
-The generated `_tokens.scss` file exports a `$tokens` map. `src/resources/styles/tokens/_config.scss` reads that map and exposes typed SCSS variables such as `$colors`, `$fonts`, `$headings`, `$theme`, `$spacing`, `$border-radius`, `$box-shadow`, `$semantic-colors`, `$z-index`, `$opacity`, and `$forms`.
+The generated `_tokens.scss` file exports a `$tokens` map. `src/resources/styles/tokens/_config.scss` reads that map and exposes typed SCSS variables such as `$colors`, `$fonts`, `$headings`, `$theme`, `$spacing`, `$font-sizes`, `$border-radius`, `$box-shadow`, `$semantic-colors`, `$z-index`, `$opacity`, and `$forms`.
 
 ### Token File Shape
 
@@ -134,6 +134,7 @@ The token file is plain JSON. Keys use the names that the bundled SCSS expects, 
   "fonts": [],
   "headings": {},
   "spacing": {},
+  "fontSizes": { "generic": {}, "semantic": {} },
   "borderRadius": {},
   "boxShadow": {},
   "semanticColors": {},
@@ -152,6 +153,7 @@ Top-level token groups:
 - `fonts`: an array of named font entries. Each entry has a `type`, a font file `uri`, and supported `sizes`.
 - `headings`: heading font metadata. It contains a shared `type`, a font `uri`, and a `variant` array with `h1` through `h6` size values.
 - `spacing`: named spacing scale values.
+- `fontSizes`: generic size values and semantic aliases that reference the generic scale.
 - `borderRadius`: named radius values. The generated SCSS exposes this group as `$border-radius`.
 - `boxShadow`: named CSS shadow values.
 - `semanticColors`: named intent colors for UI states such as `success`, `warning`, `danger`, and `info`.
@@ -194,7 +196,10 @@ Theme tokens describe reusable visual recipes that reference the color and spaci
         "iconColor": "black",
         "paddingHorizontal": "medium",
         "paddingVertical": "small",
-        "gap": "small"
+        "gap": "small",
+        "fontName": "label-text",
+        "fontSize": "label",
+        "width": "fit-content"
       }
     },
     "links": {},
@@ -224,9 +229,36 @@ iconColor
 paddingHorizontal
 paddingVertical
 gap
+fontName
+fontSize
+width
 ```
 
-Color options should use names from `colors`. `hoverColor` may also use a generated shade name such as `bright-green-100-dark-20`; when it is omitted and `backgroundColor` is known, the hover background falls back to a 20% darker color. Spacing options should use names from `spacing`.
+Color options should use names from `colors`. `hoverColor` may also use a generated shade name such as `bright-green-100-dark-20`; when it is omitted and `backgroundColor` has a configured `20` shade, the hover background uses that shade's CSS variable. Otherwise it falls back to a computed 20% darker color. Spacing options should use names from `spacing`. `fontName` accepts a name from `fonts`, or a direct CSS font-family value. `fontSize` accepts generic or semantic names from `fontSizes`, or a direct CSS font-size value.
+
+### Font Sizes
+
+Generic font sizes hold reusable values. Semantic font sizes alias that generic scale for usage-based names:
+
+```json
+{
+  "fontSizes": {
+    "generic": {
+      "small": "0.875rem",
+      "medium": "1rem",
+      "large": "1.25rem"
+    },
+    "semantic": {
+      "caption": "small",
+      "label": "small",
+      "body": "medium",
+      "title": "large"
+    }
+  }
+}
+```
+
+These generate CSS custom properties such as `--font-size-small` and `--font-size-body`. Semantic custom properties reference their generic counterparts.
 
 ### Fonts
 
@@ -399,8 +431,8 @@ The utility module exposes a base button mixin for clickable `div`-based control
 @use './src/resources/styles/utility' as utility;
 
 .button {
-  @include utility.button;
   @include utility.theme(buttons, primary);
+  @include utility.button;
 }
 ```
 
@@ -579,10 +611,20 @@ The `npx` workflow is preferred because it also installs dependencies and update
 If npm reports an `ERESOLVE` peer dependency conflict while installing the helper packages, the installer retries automatically with:
 
 ```shell
-npm install --save-dev --legacy-peer-deps json-to-scss sass prettier
+npm install --save-dev --legacy-peer-deps json-to-scss sass@1.93.2 prettier
 ```
 
 This is useful in projects with strict or outdated peer dependency ranges.
+
+### Sass requires a newer Node version
+
+Recent Sass releases may require a newer Node.js version than your project uses. The installer pins Sass to a Node 18-compatible version:
+
+```shell
+npm install --save-dev json-to-scss sass@1.93.2 prettier
+```
+
+If you install helper packages manually on Node 18, use the same Sass version pin.
 
 ### No lockfile detected
 

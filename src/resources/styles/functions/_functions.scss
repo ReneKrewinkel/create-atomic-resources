@@ -97,6 +97,12 @@ $types: 'light', 'dark';
     @return colorOrReference($hover-color);
   }
 
+  $shade-reference: colorShadeTokenReference('#{$background-color}-dark-20');
+
+  @if $shade-reference != null {
+    @return $shade-reference;
+  }
+
   $color: tokenColor($background-color);
 
   @if $color != null {
@@ -113,6 +119,36 @@ $types: 'light', 'dark';
 
   @if map.has-key(config.$spacing, $type) {
     @return string.unquote('var(--spacing-#{$type})');
+  }
+
+  @return $type;
+}
+
+@function fontSizeReference($type) {
+  @if $type == null {
+    @return null;
+  }
+
+  @if config.$font-sizes-semantic != null and map.has-key(config.$font-sizes-semantic, $type) {
+    @return string.unquote('var(--font-size-#{$type})');
+  }
+
+  @if config.$font-sizes-generic != null and map.has-key(config.$font-sizes-generic, $type) {
+    @return string.unquote('var(--font-size-#{$type})');
+  }
+
+  @return $type;
+}
+
+@function fontNameReference($type) {
+  @if $type == null {
+    @return null;
+  }
+
+  @each $font in config.$fonts {
+    @if map.get($font, 'type') == $type {
+      @return string.unquote('var(--#{$type})');
+    }
   }
 
   @return $type;

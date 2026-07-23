@@ -42,7 +42,10 @@ $tokens: (
         iconColor: black,
         paddingHorizontal: medium,
         paddingVertical: small,
-        gap: small
+        gap: small,
+        fontName: label-text,
+        fontSize: label,
+        width: fit-content
       ),
       secondary: (
         backgroundColor: highlight-black,
@@ -50,13 +53,19 @@ $tokens: (
         foregroundColor: white,
         iconColor: white,
         paddingHorizontal: medium,
-        paddingVertical: small
+        paddingVertical: small,
+        fontName: label-text,
+        fontSize: label,
+        width: fit-content
       ),
       tertiary: (
         foregroundColor: bright-green-100,
         iconColor: bright-green-100,
         paddingHorizontal: small,
-        paddingVertical: small
+        paddingVertical: small,
+        fontName: label-text,
+        fontSize: label,
+        width: fit-content
       )
     ),
     links: (
@@ -113,6 +122,19 @@ $tokens: (
     small: 1,
     medium: 2,
     large: 3
+  ),
+  fontSizes: (
+    generic: (
+      small: 0.875rem,
+      medium: 1rem,
+      large: 1.25rem
+    ),
+    semantic: (
+      caption: small,
+      label: small,
+      body: medium,
+      title: large
+    )
   ),
   borderRadius: (
     small: 4,
